@@ -170,7 +170,7 @@ export default {
         handleClick(row){
             this.$router.push('./pjDetail')
         },
-         tableRowClassName({row, rowIndex}) {
+        tableRowClassName({row, rowIndex}) {
             if (rowIndex === 1) {
             return 'warning-row';
             } else if (rowIndex === 3) {

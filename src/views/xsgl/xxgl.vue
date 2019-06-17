@@ -57,7 +57,7 @@
             style="width: 100%"
             align="center"
              :row-class-name="tableRowClassName"
-            @selection-change="handleSelectionChange">
+             @selection-change="handleSelectionChange">
                 <el-table-column
                     type="selection"
                     width="" >
