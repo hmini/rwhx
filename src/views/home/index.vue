@@ -37,6 +37,7 @@
           <div class="button-style left">
             <el-button type="primary" @click="onSubmit">增加对比</el-button>
              <el-button type="primary" @click="onSubmit">生成图表</el-button>
+              <router-link to="/pjgz" class="tolinht"><el-button type="text">进入后台</el-button></router-link>
           </div>
           <div class="clear"></div>
           <div class="over">
@@ -44,11 +45,24 @@
                   <ul class="dbnr">
                     <li>
                        <span>会计</span>
-                       <span>》》》</span>
+                       <span>>>></span>
+                       <span class="delete-db">x</span>
+                    </li>
+                    <li>
+                       <span>会计</span>
+                       <span>>>></span>
+                       <span class="delete-db">x</span>
+                    </li>
+                    <li>
+                       <span>会计</span>
+                       <span>>>></span>
+                       <span class="delete-db">x</span>
                     </li>
                   </ul>
               </div>
-              <div class="left"></div>
+              <div class="left clear-select">
+                <button >清空选择</button>
+              </div>
           </div>
              <!-- <div class="left">11</div>
              <div class="left">222</div>
@@ -84,11 +98,22 @@ export default {
     .page-index{
       .el-form{
         width:1200px;
+        padding:0px;
+        .el-form-item{
+          width:calc(20% - 5px);
+          margin-right:0px;
+        }
       }
       .button-style{
+        .tolinht{
+          position:fixed;
+          right:20px;
+          top:20px;
+          color:#999;
+        }
       }
       .dbxq{
-        width:1200px;
+        width:1170px;
         padding:20px 0;
         .dbnr{
           width:100%;
@@ -97,11 +122,45 @@ export default {
             height:50px;
             line-height:50px;
             padding:0 20px;
+            margin-bottom:15px;
             background-color:#EFEFEF;
             border:1px solid #E3E5E6;
+            position:relative;
+            .delete-db{
+              position:absolute;
+              right:20px;
+              top:-10px;
+              color:#C0C0C0;
+              font-size:20px;
+            }
           }
         }
       }
+      .clear-select{
+        margin-left:20px;
+        padding-top:20px;
+        button{
+          backgrond-color:#EFEFEF;
+          border:none;
+          line-height:40px;
+          padding:0 10px;
+        }
+      }
+      ::-webkit-input-placeholder { /* WebKit browsers */
+            color:    #385487;
+        }
+        :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+            color:    #385487;
+        }
+        ::-moz-placeholder { /* Mozilla Firefox 19+ */
+            color:    #385487;
+        }
+        :-ms-input-placeholder { /* Internet Explorer 10+ */
+            color:    #385487;
+        }
+        .el-select .el-input .el-select__caret{
+          color: #385487;
+        }
     }
 </style>
 

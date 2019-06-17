@@ -36,6 +36,10 @@ export const editQuota = (params, method) => {
 export const delQuota = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/quota/delQuota`, params, method);
 };
+// 学生信息管理list
+export const stuList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/stu/stuList`, params, method);
+};
 
 
 // 字典查询

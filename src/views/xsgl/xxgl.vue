@@ -55,7 +55,7 @@
                 </el-table-column>
                  <el-table-column
                     label="学号"
-                    prop="xh"
+                    prop="identity"
                     width="">
                 </el-table-column>
                  <el-table-column
@@ -118,50 +118,30 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination
+                small
+                layout="prev, pager, next"
+                :total="page.total"
+                 @current-change="handleCurrentChange"
+                :current-page.sync="currentPage">
+            </el-pagination>
             
         </div>
     </div>
 </template>
 <script>
 import { mapMutations } from 'vuex';
-  import {dicGrade,dicDepartment,dicSpecialty,dicTeam,dicRole} from '@/api';
+import {dicGrade,dicDepartment,dicSpecialty,dicTeam,dicRole,stuList} from '@/api';
   import { jquery } from '@/script/jquery-1.7.1';
 export default {
     data(){
         return{
             form:{
                 xj:'',
+                kx:'',
             },
-            tableData:[
-                {
-                    xh:'12344',
-                    name:'moumou',
-                    bj:'二班',
-                    xb:'女',
-                },
-                {
-                    xh:'12344',
-                    name:'moumou',
-                    bj:'二班',
-                    xb:'女',
-                },{
-                    xh:'12344',
-                    name:'moumou',
-                    bj:'二班',
-                    xb:'女',
-                },
-                {
-                    xh:'12344',
-                    name:'moumou',
-                    bj:'二班',
-                    xb:'女',
-                },{
-                    xh:'12344',
-                    name:'moumou',
-                    bj:'二班',
-                    xb:'女',
-                }
-            ],
+            
+            tableData:[],
             searchList:{
                 xj:[
                     {label:'2011',value:'2011'}
@@ -169,6 +149,14 @@ export default {
                 kx:'',
                 zy:'',
                 bj:'',
+            },
+            page:{
+                pageSize:10,
+                pageNum:1,
+                total:0,
+                firstPage:1,
+                currentPage:1,
+                
             }
         }
     },
@@ -179,6 +167,10 @@ export default {
         onSubmit(){
 
         },
+         handleCurrentChange(val) {
+        this.page.pageNum = val;
+        this.studentList();
+      },
          tableRowClassName({row, rowIndex}) {
             if (rowIndex === 1) {
             return 'warning-row';
@@ -190,17 +182,51 @@ export default {
         handleClick(row){
 
         },
+        // 学级
+         async studentList(){
+             var params = {
+                 grade_id:'',
+                 department_id:'',
+                 specialty_id:'',
+                 team_id:'',
+                 key:'',
+                 pageNum:this.page.pageNum,
+                 pageSize:this.page.pageSize,
+              };
+                var res =  await stuList(params);
+                   if(res.code ==200){
+                    this.tableData = res.data.list;
+                    this.page.pageNum = res.data.pageNum;
+                    this.page.pageSize = res.data.pageSize;
+                    this.page.firstPage = res.data.firstPage;
+                    this.page.total = res.data.total;
+                    this.page.currentPage = res.data.pageNum;
+
+                }
+                  
+                console.log(res)
+         },
 
         // 学级
          async xjList(){
-             var params = { };
+             var params = { 
+                 grade_id:'',
+                 department_id:'',
+                 specialty_id:'',
+                 team_id:'',
+                 key:'',
+                 pageNum:1,
+                 pageSize:10
+             };
                 var res =  await dicGrade(params);
+             
                 console.log(res)
          },
          // 选择科系
          async kxList(){
              var params = { };
                 var res =  await dicDepartment(params);
+
                 console.log(res)
          },
          // 选择专业
@@ -220,7 +246,7 @@ export default {
 
     },
     mounted(){
-        this.xjList();
+        this.studentList();
 
     }
 }
