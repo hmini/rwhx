@@ -4,28 +4,37 @@
             <el-form-item label="">
                 <el-select v-model="form.xj" placeholder="请输入学级">
                     <el-option  v-for="item in searchList.xj"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code">
                     </el-option>
                 </el-select>
             </el-form-item>
              <el-form-item label="">
-                <el-select v-model="form.xj" placeholder="科系">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="form.kx" placeholder="科系" @change="kxChange">
+                    <el-option  v-for="item in searchList.kx"
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code">
+                    </el-option>
                 </el-select>
             </el-form-item>
              <el-form-item label="">
-                <el-select v-model="form.xj" placeholder="专业">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="form.zy" placeholder="专业">
+                    <el-option  v-for="item in searchList.zy"
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code">
+                    </el-option>
                 </el-select>
             </el-form-item>
              <el-form-item label="">
-                <el-select v-model="form.xj" placeholder="专业所在班级">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="form.bj" placeholder="专业所在班级">
+                   <el-option  v-for="item in searchList.bj"
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code">
+                    </el-option>
                 </el-select>
             </el-form-item>
             <el-form-item>
@@ -65,47 +74,42 @@
                 </el-table-column>
                  <el-table-column
                     label="班级"
-                    prop="bj"
+                    prop="team"
                     width="">
                 </el-table-column>
                  <el-table-column
                     label="性别"
-                    prop="xb"
+                    prop="sex"
                     width="">
                 </el-table-column>
-                 <el-table-column
+                 <!-- <el-table-column
                    label="出生日期"
-                   prop="xb"
+                   prop="birthday"
                     width="">
-                </el-table-column>
-                 <el-table-column
-                   label="民族"
-                   prop="xb"
-                    width="">
-                </el-table-column>
-                 <el-table-column
+                </el-table-column> -->
+                 <!-- <el-table-column
                     label="身份证号"
                     prop="xb"
                     width="">
-                </el-table-column>
-                <el-table-column
+                </el-table-column> -->
+                <!-- <el-table-column
                     label="籍贯"
                     prop="xb"
                     width="">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                     label="联系电话"
-                    prop="xb"
+                    prop="mobile"
                     width="">
                 </el-table-column>
-                <el-table-column
+                <!-- <el-table-column
                     label="分数"
                     prop="xb"
                     width="">
-                </el-table-column>
+                </el-table-column> -->
                 <el-table-column
                     label="家长姓名"
-                    prop="xb"
+                    prop="parent"
                     width="">
                 </el-table-column>
                 <el-table-column
@@ -123,7 +127,7 @@
                 layout="prev, pager, next"
                 :total="page.total"
                  @current-change="handleCurrentChange"
-                :current-page.sync="currentPage">
+                :current-page.sync="page.currentPage">
             </el-pagination>
             
         </div>
@@ -139,12 +143,14 @@ export default {
             form:{
                 xj:'',
                 kx:'',
+                zy:'',
+                bj:'',
             },
             
             tableData:[],
             searchList:{
                 xj:[
-                    {label:'2011',value:'2011'}
+                    // {label:'2011',value:'2011'}
                 ],
                 kx:'',
                 zy:'',
@@ -165,81 +171,85 @@ export default {
 
         },
         onSubmit(){
-
+          this.studentList();  
         },
-         handleCurrentChange(val) {
-        this.page.pageNum = val;
-        this.studentList();
-      },
-         tableRowClassName({row, rowIndex}) {
+        handleCurrentChange(val) {
+            this.page.pageNum = val;
+            this.studentList();
+        },
+        kxChange() {
+            this.zyList();
+        },
+        tableRowClassName({row, rowIndex}) {
             if (rowIndex === 1) {
-            return 'warning-row';
+                return 'warning-row';
             } else if (rowIndex === 3) {
-            return 'success-row';
+                return 'success-row';
             }
-            return '';
+                return '';
         },
         handleClick(row){
 
         },
         // 学级
          async studentList(){
-             var params = {
-                 grade_id:'',
-                 department_id:'',
-                 specialty_id:'',
-                 team_id:'',
-                 key:'',
-                 pageNum:this.page.pageNum,
-                 pageSize:this.page.pageSize,
-              };
-                var res =  await stuList(params);
-                   if(res.code ==200){
-                    this.tableData = res.data.list;
-                    this.page.pageNum = res.data.pageNum;
-                    this.page.pageSize = res.data.pageSize;
-                    this.page.firstPage = res.data.firstPage;
-                    this.page.total = res.data.total;
-                    this.page.currentPage = res.data.pageNum;
-
-                }
-                  
+            var params = {
+                grade_id:this.form.xj,
+                department_id:this.form.kx,
+                specialty_id:this.form.zy,
+                team_id:this.form.bj,
+                key:'',
+                pageNum:this.page.pageNum,
+                pageSize:this.page.pageSize,
+            };
+            var res =  await stuList(params);
+                if(res.code ==200){
+                this.tableData = res.data.list;
+                this.page.pageNum = res.data.pageNum;
+                this.page.pageSize = res.data.pageSize;
+                this.page.firstPage = res.data.firstPage;
+                this.page.total = res.data.total;
+                this.page.currentPage = res.data.pageNum;
+            }
+                
                 console.log(res)
          },
 
         // 学级
          async xjList(){
-             var params = { 
-                 grade_id:'',
-                 department_id:'',
-                 specialty_id:'',
-                 team_id:'',
-                 key:'',
-                 pageNum:1,
-                 pageSize:10
-             };
-                var res =  await dicGrade(params);
-             
-                console.log(res)
+            var params = {};
+            var res =  await dicGrade(params);
+            // console.log(res);
+            if(res.code==200){
+                this.searchList.xj = res.data;
+            }
          },
          // 选择科系
          async kxList(){
-             var params = { };
-                var res =  await dicDepartment(params);
-
-                console.log(res)
+            var params = {};
+            var res =  await dicDepartment(params);
+            // console.log(res)
+            if(res.code==200){
+                this.searchList.kx = res.data;
+            }
          },
          // 选择专业
          async zyList(){
-             var params = { };
-                var res =  await dicSpecialty(params);
-                console.log(res)
+            var params = {id:this.form.kx};
+            var res =  await dicSpecialty(params);
+            // console.log(res)
+            if(res.code==200){
+                this.searchList.zy = res.data;
+            }
          },
           // 选择班级
          async bjList(){
-             var params = { };
-                var res =  await dicTeam(params);
-                console.log(res)
+            var params = { };
+            var res =  await dicTeam(params);
+                // console.log(res)
+            if(res.code==200){
+                this.searchList.bj = res.data;
+            }
          },
 
         
@@ -247,7 +257,10 @@ export default {
     },
     mounted(){
         this.studentList();
-
+        this.kxList();
+        this.xjList();
+        this.kxList();
+        this.bjList();
     }
 }
 </script>
