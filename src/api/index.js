@@ -40,6 +40,26 @@ export const delQuota = (params, method) => {
 export const stuList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/stu/stuList`, params, method);
 };
+// 学级管理list
+export const gradeList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
+};
+//  * 学级列表
+export const gradeList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
+};
+//  * 添加学级
+export const addGrade = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/addGrade`, params, method);
+};
+//    * 修改学级
+export const editGrade = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/editGrade`, params, method);
+};
+//    * 删除学级
+export const delGrade = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/delGrade`, params, method);
+};
 
 
 // 字典查询
