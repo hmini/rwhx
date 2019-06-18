@@ -32,10 +32,7 @@ export const addQuota = (params, method) => {
 export const editQuota = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/quota/editQuota`, params, method);
 };
-//删除
-export const delQuota = (params, method) => {
-  return formMiddlePromise(`${hotelBaseUrl}/quota/delQuota`, params, method);
-};
+
 // 学生信息管理list
 export const stuList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/stu/stuList`, params, method);
@@ -52,6 +49,13 @@ export const editStu = (params, method) => {
 export const stuOne = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/stu/stuOne`, params, method);
 };
+//学生个人基本信息删除
+export const delStu = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/stu/delStu`, params, method);
+};
+
+
+
 
 // 学级管理list
 export const gradeList = (params, method) => {
@@ -100,7 +104,10 @@ export const dicRole = (params, method) => {
 export const usersList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/dic/usersList`, params, method);
 };
-
+//删除字典
+export const delQuota = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/quota/delQuota`, params, method);
+};
 //学院管理
 //学级管理
 export const collegeGradeList = (params, method) => {

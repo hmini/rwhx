@@ -130,9 +130,8 @@
                 :total="page.total"
                  @current-change="handleCurrentChange"
                 :current-page.sync="page.currentPage">
+                <div class="left">当前第5页</div>
             </el-pagination>
-
-
             <el-dialog
                 title="删除"
                 :visible.sync="dialogVisible"
@@ -149,7 +148,7 @@
 </template>
 <script>
 import { mapMutations } from 'vuex';
-import {dicGrade,dicDepartment,dicSpecialty,dicTeam,dicRole,stuList,delQuota} from '@/api';
+import {dicGrade,dicDepartment,dicSpecialty,dicTeam,dicRole,stuList,delStu} from '@/api';
   import { jquery } from '@/script/jquery-1.7.1';
 export default {
     data(){
@@ -301,8 +300,9 @@ export default {
              var params={
                  id:this.deleteid
              };
-              var res =  await delQuota(params);
+              var res =  await delStu(params);
               if(res.code == 200){
+                  this.dialogVisible = false;
                   this.$message(res.message);
                   this.studentList();
               }else{
