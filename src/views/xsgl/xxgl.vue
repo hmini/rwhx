@@ -45,8 +45,8 @@
         <el-button type="primary" @click="linkPage()">新增学生</el-button>
             <el-button type="info">删除选择项</el-button>
             <div class="right search">
-                <el-input class=""></el-input>
-                <i class="iconfont icon-chaxun"></i>
+                <el-input class="" v-model="form.key"></el-input>
+                <i class="iconfont icon-chaxun" @click="onSubmit()"></i>
             </div>
             
         </div>
@@ -146,6 +146,7 @@ export default {
                 kx:'',
                 zy:'',
                 bj:'',
+                key:''
             },
             loading:false,
             tableLoading:false,
@@ -195,6 +196,7 @@ export default {
                 return '';
         },
         handleClick(row){
+             this.$router.push({path: '/XxglEdit',query:{id:row.id}});
 
         },
         // 学生信息list
@@ -206,7 +208,7 @@ export default {
                 department_id:this.form.kx,
                 specialty_id:this.form.zy,
                 team_id:this.form.bj,
-                key:'',
+                key:this.form.key,
                 pageNum:this.page.pageNum,
                 pageSize:this.page.pageSize,
             };

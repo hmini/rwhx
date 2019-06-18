@@ -40,10 +40,26 @@ export const delQuota = (params, method) => {
 export const stuList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/stu/stuList`, params, method);
 };
+// 学生信息管理增加
+export const addStu = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/stu/addStu`, params, method);
+};
+// 学生信息管理编辑
+export const editStu = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/stu/editStu`, params, method);
+};
+//学生个人基本信息
+export const stuOne = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/stu/stuOne`, params, method);
+};
+
 // 学级管理list
 export const gradeList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
 };
+
+
+
 
 //  * 添加学级
 export const addGrade = (params, method) => {

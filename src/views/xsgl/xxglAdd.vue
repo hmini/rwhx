@@ -111,7 +111,7 @@
 </template>
 <script>
 import { mapMutations } from 'vuex';
-import {dicGrade,dicDepartment,dicSpecialty,dicTeam,dicRole,stuList} from '@/api';
+import {dicGrade,dicDepartment,dicSpecialty,dicTeam,dicRole,addStu} from '@/api';
 import { jquery } from '@/script/jquery-1.7.1';
     export default {
         data(){
@@ -204,7 +204,7 @@ import { jquery } from '@/script/jquery-1.7.1';
             onSubmit(formName){
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        alert('submit!');
+                       this.addStudent();
                     } else {
                         console.log(this.form)
                         console.log('error submit!!');
@@ -264,6 +264,36 @@ import { jquery } from '@/script/jquery-1.7.1';
                 var res =  await dicTeam(params);
                 if(res.code==200){
                     this.searchList.bj = res.data;
+                }else{
+                    this.$message(res.message);  
+                }
+
+            },
+             async addStudent(){
+                var params = {
+                    name:this.form.name,
+                    identity:this.form.identity,
+                    sex:this.form.sex,
+                    birthday:this.form.birthday,
+                    nation:this.form.nation,
+                    card:this.form.card,
+                    origin:this.form.origin,
+                    mobile:this.form.mobile,
+                    grade_id:this.form.grade_id,
+                    department_id:this.form.department_id,
+                    specialty_id:this.form.specialty_id,
+                    team_id:this.form.team_id,
+                    parent:this.form.parent,
+                    parentmobile:this.form.parentmobile,
+                    address:this.form.address,
+                    password:this.form.password,
+                }
+                var res =  await addStu(params);
+                if(res.code==200){
+                    console.log(res);
+                     this.$message(res.message);  
+                    this.$router.push({path: '/xxgl'});
+                    
                 }else{
                     this.$message(res.message);  
                 }
