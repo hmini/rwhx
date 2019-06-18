@@ -102,11 +102,7 @@
                 this.add_Grade();
             },
             deleteEvent(){
-                // var params = {id:this.change.id};
-                // var res =  await delGrade(params);
-                // if(res.code ==200){
-                //     this.$message(res.message);
-                // }
+                this.del_Grade();
             },
             delClick(id){
                 this.dialogVisible2 = true;
@@ -153,6 +149,15 @@
                     this.bjxj = false;
                     this.college_GradeList();
                 }
+                this.$message(res.message);
+            },
+            async del_Grade(){
+                var params = {id:this.change.id};
+                var res =  await delGrade(params);
+                if(res.code ==200){
+                    this.college_GradeList();
+                }
+                this.dialogVisible2 = false;
                 this.$message(res.message);
             },
         },
