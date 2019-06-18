@@ -153,6 +153,7 @@ export default {
                 bj:'',
                 key:''
             },
+            
             dialogVisible:false,
             loading:false,
             tableLoading:false,

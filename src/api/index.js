@@ -112,6 +112,11 @@ export const dicRole = (params, method) => {
 export const usersList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/dic/usersList`, params, method);
 };
+
+// 选择学期
+export const termList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/termList`, params, method);
+};
 //删除字典
 export const delQuota = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/quota/delQuota`, params, method);

@@ -1,7 +1,7 @@
 <template>
-    <div class="page page-pjdetail">
+    <div class="page page-pjsz">
       <el-container>
-       <el-header class="align-left">
+        <el-header class="align-left">
            <span>高职</span>
            <span>>></span>
            <span>会计</span>
@@ -10,8 +10,23 @@
            <span>会计</span>
        </el-header>
         <el-main style="padding-left:0px">
+            <el-form :inline="true" class="align-left padding-left-20">
+                <el-form-item>
+                     <el-select v-model="form.xq" placeholder="学期">
+                        <el-option  v-for="item in xq"
+                        :key="item.id"
+                        :label="item.term"
+                        :value="item.id">
+                    </el-option>
+                    </el-select>
+
+                </el-form-item>    
+                 <el-form-item>
+                    <el-button type="primary" @click="list()">查询</el-button>
+                </el-form-item>   
+            </el-form>
             <div class="pjsz">
-                <table class="backfff" >
+                <table class="backfff"   v-loading="fullscreenLoading">
                     <thead>
                         <tr class="pjsz-title">
                             <td>一级指标</td>
@@ -25,92 +40,131 @@
                             <td class="pjsz-main oneji" style="width:20%;">
                                 <table>
                                         <tr class ="static" v-for="(item,index) in oneList" :key="index" @click="oneClick(item.fjMenu.id,index)" v-bind:class="{ active: index == oneid }">
-                                            
+                                            <td class="qzz">
+                                                <p>
+                                                    <span> 权重<br/>
+                                                    <input type="text" v-model="item.fjMenu.weight" class="input-qzz border-none" :disabled="disabledOne" v-bind:class="{ activeiput: disabledOne == false }"/>%
+                                                    </span>
+                                                </p>
+                                            </td>
                                             <td class="nameMain">
                                                 <p>
                                                     <span>{{item.fjMenu.name}}</span><br/>
-                                                    <span>{{item.fjMenu.standard}}</span>
+                                                    <span class="padding-5">参考值:{{item.fjMenu.standard}}</span>
+                                                     <span class="padding-5">当前值:{{Math.round(item.scrce)}}</span>
                                                 </p> 
                                             </td>
-                                            <td class="set">
-                                                <p class="iconfont icon-set"> </p>
-                                                <p class="iconfont icon-delete1" @click="deleteif(item.fjMenu.id)"></p> 
-                                            </td>
                                         </tr>
-                                     
                                 </table>
                             </td>
                             <td class="pjsz-main twoji" style="width:20%;">
                                   <table>
                                     <tr v-for="(item,index) in twoList" :key="index" @click="twoClick(item.fjMenu.id,index)" class="static" v-bind:class="{ active: index == twoId }">
-                                       
+                                        <td class="qzz">
+                                            <p>
+                                                <span> 权重<br/>
+                                                  <input type="text" v-model="item.fjMenu.weight" class="input-qzz border-none" :disabled="disabledTwo" v-bind:class="{ activeiput: disabledTwo == false }"/>%
+                                                </span>
+                                            </p>
+                                        </td>
                                         <td class="nameMain">
                                             <p>
                                                 <span>{{item.fjMenu.name}}</span><br/>
-                                                <span>{{item.fjMenu.standard}}</span>
+                                                <span class="padding-5">参考值:{{item.fjMenu.standard}}</span>
+                                                <span class="padding-5">当前值:{{Math.round(item.scrce)}}</span>
                                             </p> 
                                         </td>
-                                        <td class="set">
-                                            <p class="iconfont icon-set"> </p>
-                                            <p class="iconfont icon-delete1"></p>
-                                        </td>
+                                       
                                     </tr>
-                                   
                                 </table>
                             </td> 
                             <td class="pjsz-main threeji" style="width:20%;" >
                                  <table>
                                     <tr class ="static" v-for="(item,index) in threeList" :key="index" @click="threeClick(item.fjMenu.id,index)" v-bind:class="{ active: index == threeId }">
-                                       
+                                        <td class="qzz">
+                                            <p>
+                                                <span> 权重<br/>
+                                                     <input type="text" v-model="item.fjMenu.weight" class="input-qzz border-none" :disabled="disabledThree" v-bind:class="{ activeiput: disabledThree == false }"/>%
+                                                </span>
+                                            </p>
+                                        </td>
                                         <td class="nameMain">
                                             <p>
                                                 <span>{{item.fjMenu.name}}</span><br/>
-                                                <span>{{item.fjMenu.standard}}</span>
+                                                <span class="padding-5">参考值:{{item.fjMenu.standard}}</span> 
+                                                <span class="padding-5">当前值:{{Math.round(item.scrce)}}</span>
                                             </p> 
                                         </td>
-                                        <td class="set">
-                                            <p class="iconfont icon-set"> </p>
-                                            <p class="iconfont icon-delete1"></p>
-                                        </td>
-                                        
+                                       
                                     </tr>
-                                  
+                                    
                                 </table>
                             </td>
                             <td class="pjsz-main fourji" style="width:40%;">
                                  <table>
                                     <tr class ="static" v-for="(item,index) in fourList" :key="index" @click="fourClick(item.id,index)" v-bind:class="{ active: index == fourId }">
-                                       
+                                        <td class="qzz">
+                                            <p>
+                                                <span>权重<br/>
+                                               <input type="text" v-model="item.weight" class="input-qzz border-none" :disabled="disabledFour" v-bind:class="{ activeiput: disabledFour == false }"/>%</span>
+                                            </p>
+                                        </td>
                                         <td class="nameMain">
                                             <p class="margin-20">
                                                 <span>{{item.name}}</span><br/>
                                             </p> 
                                             <p class="csfz">
                                                 <span>评分方式:加分</span>
-                                                <span>初始分值:0.00</span>
-                                                <span>参考分值:0.00</span>
+                                                <span>初始分值:0.00</span><br/>
+                                                <span> <i>参考分值:0.00</i> <i>当前值:0.00</i> <i>已加分:0.00</i><i>加分次数:0.00</i></span>
                                             </p>
                                         </td>
-                                        <td class="set">
-                                            <p class="iconfont icon-set"> </p>
-                                            <p class="iconfont icon-delete1"></p>
-                                        </td>
+                                      
                                     </tr>
                                    
                                 </table>
                             </td>
                         </tr>
-                     
+                        <el-dialog
+                            title=""
+                            :visible.sync="dialogVisible"
+                            width="30%" class="align-left">
+                                <el-form :label-position="labelPosition" :model="addForm" :rules="rules" ref="addForm">
+                                    <el-form-item label="指标" prop="name">
+                                        <el-input v-model="addForm.name"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="参考分值" prop="standard">
+                                        <el-input v-model="addForm.standard"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="初始分值" v-show="listPd == true" prop="initial">
+                                        <el-input v-model="addForm.initial"></el-input>
+                                    </el-form-item>
+                                    <el-form-item label="评分方式" v-show="listPd == true" prop="type">
+                                         <el-select v-model="addForm.type" placeholder="请选择评分方式">
+                                            <el-option label="加分" value="0" ></el-option>
+                                            <el-option label="减分" value="1"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-form>
+                            <span slot="footer" class="dialog-footer">
+                                <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+                                <el-button type="primary" @click="submitForm('addForm')" v-if="edit == false">保存</el-button>
+                                 <el-button type="primary" @click="submitFormedit('addForm') " v-show="edit == true">保存</el-button>
+                            </span>
+                        </el-dialog>
+                        <el-dialog
+                            title="删除"
+                            :visible.sync="dialogVisible2"
+                            width="30%">
+                            <span>您确定要删除这个指标</span>
+                            <span slot="footer" class="dialog-footer">
+                                <el-button @click="dialogVisible2 = false">取 消</el-button>
+                                <el-button type="primary" @click="deleteSure()">确 定</el-button>
+                            </span>
+                        </el-dialog>
                     </tbody>
                 </table>
               
-            </div>
-            <div class="padding-left-20">
-                <el-form ref="form" :model="form" label-width="80px" label-position="top"  class="align-left">
-                    <el-form-item label="导师评价">
-                         <el-input type="textarea" v-model="form.pj"></el-input>
-                    </el-form-item>
-                </el-form>
             </div>
            
         </el-main>
@@ -119,7 +173,7 @@
 </template>
 <script>
   import { mapMutations } from 'vuex';
-  import { pjgzList,weightEdit,addQuota,delQuota} from '@/api';
+  import { pjgzList,weightEdit,addQuota,delQuota,editQuota,termList,scoreList } from '@/api';
   import { jquery } from '@/script/jquery-1.7.1';
 export default {
     data(){
@@ -149,10 +203,15 @@ export default {
         disabledThree:true,
         disabledFour:true,
         fourId:0,
+        form:{
+            xq:'',
+        },
+        xq:'',
         dataList:[],
         oneList:[],
         twoList:[],
         threeList:[],
+        edit:false,
         fourList:[],
         kongList:[],
         isActive:false,
@@ -163,6 +222,8 @@ export default {
             name:'', 
             initial:'0', 
             type:'0',
+            id:'',
+            parent_id:'',
         },
         deleteId:'',
         rules:{
@@ -178,9 +239,13 @@ export default {
         },
         labelPosition:'top',
         listPd:false,
-        form:{
-            pj:''
-        }
+        fullscreenLoading:false,
+       idList:{
+           oneId:0,
+           twoId:'',
+           threeId:'',
+           fourId:'',
+       }
       }  
     },
     methods:{
@@ -189,160 +254,110 @@ export default {
           this.threeId = 0;
           this.fourId = 0;
           this.twoId = 0;
-          this.xrsj()
+          this.xrsj();
+          this.idList.twoId = id;
+          
       },
       twoClick(id,index){
             this.twoId = index;
             this.threeId = 0;
             this.fourId = 0;
-          this.xrsj()
+            this.xrsj();
+             this.idList.threeId = id;
       },
       threeClick(id,index){
           this.threeId = index;
             this.fourId = 0;
-          this.xrsj()
+          this.xrsj();
+          this.idList.fourId = id;
       },
       fourClick(id,index){
             this.fourId = index;
           this.xrsj()
       },
       xrsj(){
-          this.oneList = this.dataList;
-          this.twoList = this.oneList[this.oneid].zjMenu;
-          this.threeList = this.twoList[this.twoId].zjMenu;
-          this.fourList = this.threeList[this.threeId].zjMenu;
+             this.oneList = this.dataList;
+             this.twoList = this.oneList[this.oneid].zjMenu;
+             this.idList.twoId=this.oneList[0].fjMenu.id;
+          if( this.twoList.length == 0){
+                this.twoList = []; 
+                this.threeList = [];
+                this.fourList=[];
+                this.idList.threeId='';
+                this.idList.fourId='';
+          }else{
+               this.threeList = this.twoList[this.twoId].zjMenu;
+               this.idList.threeId = this.oneList[this.oneid].zjMenu[0].fjMenu.id;
+               if(this.threeList.length==0){
+                this.fourList=[];
+                this.idList.fourId='';
+               }else{
+                   this.idList.fourId = this.twoList[this.twoId].zjMenu[0].fjMenu.id;
+                   this.fourList = this.threeList[this.threeId].zjMenu;
+               }
+          }
           console.log(this.fourList)
       },
-      editWeight(list,disabledOne){
-          var arry=[];
-          var arry2 = [];
-          var num = 0;
-          if(disabledOne !== 4){
-              for(var i = 0;i<list.length;i++){
-                arry.push(list[i].fjMenu.weight);
-                arry2.push(list[i].fjMenu.id);
-                
-                num = num+parseInt(list[i].fjMenu.weight);
-            }
-          }else{
-            for(var i = 0;i<list.length;i++){
-                arry.push(list[i].weight);
-                arry2.push(list[i].id);
-            }  
-          }
-         if(num>100){
-              this.$message('总权重值不能超过100%');
-         }else{
-              var weight = arry.join(',');
-                var id = arry2.join(',');
-                var params={
-                    weight:weight,
-                    id:id
-                };
-                this.xgwt(params,disabledOne);
-         }
-         
-      },
+   
       // 表格list
-      async list(){
-             var params = {};
-             var res = await pjgzList(params);
+        async list(){
+             var params = {
+                 student_id:this.$route.query.id,
+                 term_id:this.form.xq,
+             };
+             var res = await scoreList(params);
             if(res.code == 200){
+                console.log(res)
                 this.dataList = res.data;
                 this.xrsj()
             }else{
                   this.$message(res.message);
             }
       },
-      async xgwt(paramsList,disabledOne){
-             var params = paramsList
-             var res = await weightEdit(params);
-            if(res.code == 200){
-                this.$message(res.message);
-                if(disabledOne == 1){
-                    this.disabledOne = true
-                }else if(disabledOne =2){
-                    this.disabledTwo = true
-                }else if(disabledOne =3){
-                    this.disabledThree = true
-                }else{
-                     this.disabledFour = true
-                }
-                
+      // 学期
+         async xqList(){
+            var params = {};
+            var res =  await termList(params);
+            console.log(res);
+            if(res.code==200){
+                this.xq = res.data;
+                this.form.xq = res.data[0].id;
+                this.list();
+
             }else{
-                this.$message(res.message);
+             this.$message(res.message);  
             }
-      },
-      add(list){
-        this.addForm.standard='',
-        this.addForm.name='',
-        this.addForm.initial=0,
-        this.addForm.type='0',
-        this.dialogVisible = true;
-        this.listPd = false;
-        this.kongList =  list;
-        if(list == this.fourList){
-            this.listPd = true
-        }
-      },
+        },
       submitForm(formName){
            this.$refs[formName].validate((valid) => {
           if (valid) {
             this.addFunction()
           } else {
-            console.log('error submit!!');
             return false;
           }
         });
       },
-
-      async addFunction(){
-          if(this.listPd == false){
-                var parent_id = this.kongList[0].fjMenu.parent_id
-          }else{
-              var parent_id = this.kongList[0].parent_id
-          };
-            var params={
-             parent_id:parent_id,
-             standard:this.addForm.standard,
-             name:this.addForm.name,
-             initial:this.addForm.initial,
-             type:this.addForm.type,
+      submitFormedit(formName){
+          this.$refs[formName].validate((valid) => {
+          if (valid) {
+            this.editFunction()
+          } else {
+            return false;
           }
-          console.log(params)
-           var res = await addQuota(params);
-           if(res.code == 200){
-                this.dialogVisible = false;
-                this.list();
-           }
+        });
       },
-       deleteif(id){
-          this.dialogVisible2 = true;
-          this.deleteId = id;
-        },
-        async deleteSure(){
-            var params = {
-                id:this.deleteId
-            };
-           var res = await delQuota(params);
-           if(res.code == 200){
-               this.$message('删除成功');
-                this.dialogVisible2 = false;
-                this.list()
-           }else{
-             this.$message(res.message);  
-           }
-        },
+    
     
 
     },
     mounted(){
-        this.list();
+        this.xqList();
+        
     }
 }
 </script>
 <style lang="stylus" scoped>
-    .page-pjdetail{
+    .page-pjsz{
         .el-header{
             color:#79C6E4;
             line-height:60px;
@@ -358,6 +373,14 @@ export default {
                  vertical-align:top;   
                 }
                 height:auto;
+                .pjsz-title{
+                    td{
+                        color:#0478A4;
+                        line-height:40px;
+                       border-bottom:1px solid #E5E5E5;  
+                    }
+                   
+                }
                 .pjsz-main{
                     padding:10px;
                     height:100%;
@@ -369,7 +392,7 @@ export default {
                         .qzz{
                             color:#3181BB;
                          
-                             background-color:rgba(221,221,221,0.4);
+                             background-color:#DDDDDD;
                         }
                         .xian{
                              position:absolute;
@@ -418,7 +441,6 @@ export default {
                                 text-align:left;
                                 padding-left:10px;
                                 padding:20px;
-                               
                                 .margin-20{
                                      margin-bottom:20px;
                                      padding-right:20px;
@@ -431,6 +453,12 @@ export default {
                                     display:inline-block;
                                     margin-right:10px;
                                     border-radius:4px;
+                                    margin-bottom:10px
+                                    i{
+                                        font-style:normal;
+                                        display:inline-block;
+                                        margin-right:5px;
+                                    }
                                 }
                             }
                             .set{
@@ -438,18 +466,19 @@ export default {
                                 border-bottom-right-radius:20px;
                                 position:relative;
                                 width:20px;
-                                
                                 p{
                                     position:absolute;
                                 }
                                 .icon-set{
                                     top:5px;
-                                    right:15px; 
+                                    right:15px;
+                                    color:#C5C5C5; 
                                     
                                 }
                                 .icon-delete1{
                                     bottom:5px;
                                     right:15px; 
+                                    color:#C5C5C5; 
                                 }
 
                             }
@@ -550,13 +579,13 @@ export default {
                 }
             }
           
-          .pjsz-title{
-            li{
-                text-align:left;
-                padding:5px;
-                color:#0076A3 
-            }       
-          } 
+        //   .pjsz-title{
+        //     li{
+        //         text-align:left;
+        //         padding:5px;
+        //         color:#0076A3 
+        //     }       
+        //   } 
       }
     }
 </style>
