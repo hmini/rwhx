@@ -67,3 +67,9 @@ export const dicRole = (params, method) => {
 export const usersList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/dic/usersList`, params, method);
 };
+
+//学院管理
+//学级管理
+export const collegeGradeList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
+};
