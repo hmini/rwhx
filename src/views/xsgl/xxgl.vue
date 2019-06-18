@@ -50,7 +50,7 @@
             </div>
             
         </div>
-        <div style="width:100%;padding-top:20px;">
+        <div style="width:100%;padding-top:20px;" v-loading="tableLoading">
             <el-table
             ref="multipleTable"
             :data="tableData"
@@ -58,7 +58,7 @@
             align="center"
              :row-class-name="tableRowClassName"
              @selection-change="handleSelectionChange"
-             v-loading="tableLoading">
+             >
                 <!-- <el-table-column
                     type="selection"
                     width="" >
@@ -124,14 +124,14 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-pagination
-                small
-                layout="prev, pager, next"
-                :total="page.total"
+            <div class="fenye over">
+                <div class="left padding-left-20">当前第{{this.page.currentPage}}页</div>
+                 <el-pagination  small  layout="prev, pager, next" :total="page.total"
                  @current-change="handleCurrentChange"
                 :current-page.sync="page.currentPage">
-                <div class="left">当前第5页</div>
             </el-pagination>
+            </div>
+           
             <el-dialog
                 title="删除"
                 :visible.sync="dialogVisible"
@@ -338,6 +338,13 @@ export default {
 
             }
             // border:1px solid #999;
+        }
+        .fenye{
+            width:100%;
+            padding-top:20px;
+            .el-pagination{
+                float:right;
+            }
         }
     }
 </style>

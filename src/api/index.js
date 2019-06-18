@@ -53,6 +53,14 @@ export const stuOne = (params, method) => {
 export const delStu = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/stu/delStu`, params, method);
 };
+//学生评价List
+export const scoreList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/stu/scoreList`, params, method);
+};
+//添加评分
+export const addScore = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/stu/addScore`, params, method);
+};
 
 
 

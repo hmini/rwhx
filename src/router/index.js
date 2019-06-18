@@ -16,7 +16,7 @@ const Jsgl = r => require.ensure([], () => r(require('@/views/xtsz/jsgl')), 'jsg
 const Yhgladd = r => require.ensure([], () => r(require('@/views/xtsz/yhgladd')), 'yhgladd'); //角色管理添加
 const XxglAdd = r => require.ensure([], () => r(require('@/views/xsgl/xxglAdd')), 'xxglAdd'); //学生信息管理添加
 const XxglEdit = r => require.ensure([], () => r(require('@/views/xsgl/xxglEdit')), 'xxglEdit'); //学生信息管理编辑
-const PjDetail = r => require.ensure([], () => r(require('@/views/xsgl/pjDetail')), 'pjDetail'); //学生信息详情
+const PjDetail = r => require.ensure([], () => r(require('@/views/xsgl/pjDetail')), 'pjDetail'); //学生评价管理详情
 
 
 
