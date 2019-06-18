@@ -10,28 +10,27 @@
                     <el-button type="primary" @click="dialogVisible = true"><i class="iconfont icon-jiashang"></i>增加</el-button>
                 </div>
                 <div class="over width100 zynr">
-                    <div class="nj-content">
-                        <div class="left">2018</div>
+                    <div class="nj-content" v-for="(item,index) in list.xj" :key="index">
+                        <div class="left">{{item.grade}}</div>
                         <div class="right">
-                            <el-button class="buttonback"><i class="iconfont icon-jiashang"></i>编辑</el-button>
+                            <el-button class="buttonback" @click="bjClick(item.id,item.grade)"><i class="iconfont icon-jiashang"></i>编辑</el-button>
                             <el-button @click="dialogVisible2 = true" class="buttonback"><i class="iconfont icon-jiashang"></i>删除</el-button>
                         </div>
                     </div>
-                    <div class="nj-content">
+                    <!-- <div class="nj-content">
                         <div class="left">2018</div>
                         <div class="right">
                             <el-button class="buttonback"><i class="iconfont icon-jiashang"></i>编辑</el-button>
                             <el-button class="buttonback" @click="dialogVisible2 = true"><i class="iconfont icon-jiashang"></i>删除</el-button>
                         </div>
-                    </div>
-                    <div class="nj-content">
+                    </div> -->
+                    <!-- <div class="nj-content">
                         <div class="left">2018</div>
                         <div class="right">
                             <el-button class="buttonback"><i class="iconfont icon-jiashang"></i>编辑</el-button>
                             <el-button class="buttonback" @click="dialogVisible2 = true"><i class="iconfont icon-jiashang"></i>删除</el-button>
                         </div>
-                    </div>
-                    
+                    </div> -->
                 </div>
             </div>
             <el-dialog
@@ -56,6 +55,19 @@
                     <el-button type="primary" @click="deleteEvent()">确 定</el-button>
                 </span>
             </el-dialog>
+             <el-dialog
+                title="学级"
+                :visible.sync="bjxj"
+                width="30%" class="align-left">
+                <div>   
+                    <el-input v-model="form.bjxj"></el-input>
+                </div>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="bjxj = false">取 消</el-button>
+                    <el-button type="primary" @click="addXj()">确 定</el-button>
+                </span>
+            </el-dialog>
+            
 
 
             
@@ -63,11 +75,25 @@
     </div>
 </template>
 <script>
+    import { mapMutations } from 'vuex';
+    import {collegeGradeList} from '@/api';
+    import { jquery } from '@/script/jquery-1.7.1';
     export default {
         data(){
             return{
+                form:{
+                    xj:'',
+                    bjxj:'',
+                },
+                change:{
+                    bjid:'',
+                },
                 dialogVisible:false,
-                dialogVisible2:false
+                dialogVisible2:false,
+                bjxj:false,
+                list:{
+                    xj:'',
+                }
             }
         },
         methods:{
@@ -76,7 +102,29 @@
             },
             deleteEvent(){
 
-            }
+            },
+            bjClick(id,grade){
+                this.bjxj = true;
+                this.form.bjxj = grade;
+                this.change.bjid = id;
+                // console.log("form.bjxj==="+this.form.bjxj);
+                // console.log("change.bjid==="+this.change.bjid);
+            },
+            //初始化学级管理
+            init_college_GradeList(){
+                this.college_GradeList();
+            },
+            // 学级
+            async college_GradeList(){
+                var params = {};
+                var res =  await collegeGradeList(params);
+                if(res.code ==200){
+                    this.list.xj = res.data;
+                }
+            },
+        },
+        mounted(){
+            this.init_college_GradeList();
         }
     }
 </script>

@@ -44,10 +44,7 @@ export const stuList = (params, method) => {
 export const gradeList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
 };
-//  * 学级列表
-// export const gradeList = (params, method) => {
-//   return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
-// };
+
 //  * 添加学级
 export const addGrade = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/addGrade`, params, method);
@@ -86,4 +83,10 @@ export const dicRole = (params, method) => {
 // 选择老师
 export const usersList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/dic/usersList`, params, method);
+};
+
+//学院管理
+//学级管理
+export const collegeGradeList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
 };
