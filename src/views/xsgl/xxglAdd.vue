@@ -65,6 +65,7 @@
                        <el-date-picker
                             v-model="form.birthday"
                             type="date"
+                            value-format="yyyy-MM-dd"
                             placeholder="出生日期">
                         </el-date-picker>
                     </el-form-item>
@@ -81,10 +82,10 @@
                         <el-input v-model="form.mobile" ></el-input>
                     </el-form-item>
                     <el-form-item label="家长姓名" >
-                        <el-input v-model="form.xh" ></el-input>
+                        <el-input v-model="form.parent" ></el-input>
                     </el-form-item>
                     <el-form-item label="家长电话" >
-                        <el-input v-model="form.parent" ></el-input>
+                        <el-input v-model="form.parentmobile" ></el-input>
                     </el-form-item>
                     <el-form-item label="家庭住址" style="width:100%;">
                         <el-input v-model="form.address" ></el-input>
@@ -191,7 +192,7 @@ import { jquery } from '@/script/jquery-1.7.1';
                         { required: true, message: '请选择性别', trigger: 'change' },
                     ],
                     birthday: [
-                        { required: true, type: 'date',message: '请选择出生日期', trigger: 'blur' },
+                        { required: true, type: 'string',message: '请选择出生日期', trigger: 'change' },
                     ],
                 },
                 imageUrl:''

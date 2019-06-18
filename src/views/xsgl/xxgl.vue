@@ -43,7 +43,7 @@
         </el-form>
         <div class="align-left padding-left-20">
         <el-button type="primary" @click="linkPage()">新增学生</el-button>
-            <el-button type="info">删除选择项</el-button>
+            <!-- <el-button type="info">删除选择项</el-button> -->
             <div class="right search">
                 <el-input class="" v-model="form.key"></el-input>
                 <i class="iconfont icon-chaxun" @click="onSubmit()"></i>
@@ -59,14 +59,14 @@
              :row-class-name="tableRowClassName"
              @selection-change="handleSelectionChange"
              v-loading="tableLoading">
-                <el-table-column
+                <!-- <el-table-column
                     type="selection"
                     width="" >
-                </el-table-column>
+                </el-table-column> -->
                  <el-table-column
                     label="学号"
                     prop="identity"
-                    width="">
+                   >
                 </el-table-column>
                  <el-table-column
                     label="姓名"
@@ -119,6 +119,7 @@
                     width="">
                       <template slot-scope="scope">
                         <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                        <el-button @click="deleteClick(scope.row)" type="text" size="small">删除</el-button>
                         <!-- <el-button type="text" size="small">编辑</el-button> -->
                     </template>
                 </el-table-column>
@@ -170,7 +171,11 @@ export default {
         }
     },
     methods:{
-        handleSelectionChange(){
+        handleSelectionChange(val){
+            console.log(val);
+
+        },
+        deleteClick(row){
 
         },
         onSubmit(){

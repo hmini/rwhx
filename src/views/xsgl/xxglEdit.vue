@@ -65,6 +65,7 @@
                        <el-date-picker
                             v-model="form.birthday"
                             type="date"
+                            value-format="yyyy-MM-dd"
                             placeholder="出生日期">
                         </el-date-picker>
                     </el-form-item>
@@ -81,10 +82,10 @@
                         <el-input v-model="form.mobile" ></el-input>
                     </el-form-item>
                     <el-form-item label="家长姓名" >
-                        <el-input v-model="form.xh" ></el-input>
+                        <el-input v-model="form.parent" ></el-input>
                     </el-form-item>
                     <el-form-item label="家长电话" >
-                        <el-input v-model="form.parent" ></el-input>
+                        <el-input v-model="form.parentmobile" ></el-input>
                     </el-form-item>
                     <el-form-item label="家庭住址" style="width:96%;">
                         <el-input v-model="form.address" ></el-input>
@@ -191,7 +192,7 @@ import { jquery } from '@/script/jquery-1.7.1';
                         { required: true, message: '请选择性别', trigger: 'change' },
                     ],
                     birthday: [
-                        { required: true, type: 'date',message: '请选择出生日期', trigger: 'blur' },
+                        { required: true, type: 'string',message: '请选择出生日期', trigger: 'change' },
                     ],
                 },
                 imageUrl:''
@@ -310,7 +311,11 @@ import { jquery } from '@/script/jquery-1.7.1';
                    
                     this.form.name = this.fhz(res.data.name);
                     this.form.identity=  this.fhz(res.data.identity);
-                    this.form.sex = this.fhz(res.data.sex);
+                    if(this.fhz(res.data.sex) == '女'){
+                         this.form.sex = "1"
+                    }else{
+                         this.form.sex = "0"
+                    }
                     this.form.birthday= this.fhz(res.data.birthday);
                     this.form.nation= this.fhz(res.data.nation);
                     this.form.card= this.fhz(res.data.card);
@@ -323,7 +328,6 @@ import { jquery } from '@/script/jquery-1.7.1';
                     this.form.parent= this.fhz(res.data.parent);
                     this.form.parentmobile= this.fhz(res.data.parentmobile);
                     this.form.address= this.fhz(res.data.address);
-                    console.log(this.form)
                      this.zyList();
                      this.bjList();
                     
