@@ -14,7 +14,7 @@
                         <div class="left">{{item.grade}}</div>
                         <div class="right">
                             <el-button class="buttonback" @click="bjClick(item.id,item.grade)"><i class="iconfont icon-jiashang"></i>编辑</el-button>
-                            <el-button @click="dialogVisible2 = true" class="buttonback"><i class="iconfont icon-jiashang"></i>删除</el-button>
+                            <el-button @click="delClick(item.id)" class="buttonback"><i class="iconfont icon-jiashang"></i>删除</el-button>
                         </div>
                     </div>
                     <!-- <div class="nj-content">
@@ -38,7 +38,7 @@
                 :visible.sync="dialogVisible"
                 width="30%" class="align-left">
                 <div>   
-                    <el-input></el-input>
+                    <el-input  v-model="form.xj"></el-input>
                 </div>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
@@ -63,8 +63,8 @@
                     <el-input v-model="form.bjxj"></el-input>
                 </div>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="bjxj = false">取 消</el-button>
-                    <el-button type="primary" @click="addXj()">确 定</el-button>
+                    <el-button @click="bjxj =false">取 消</el-button>
+                    <el-button type="primary" @click="bjxj_submit()">确 定</el-button>
                 </span>
             </el-dialog>
             
@@ -76,7 +76,7 @@
 </template>
 <script>
     import { mapMutations } from 'vuex';
-    import {collegeGradeList} from '@/api';
+    import {collegeGradeList,editGrade,addGrade,delGrade} from '@/api';
     import { jquery } from '@/script/jquery-1.7.1';
     export default {
         data(){
@@ -87,6 +87,7 @@
                 },
                 change:{
                     bjid:'',
+                    id:'',
                 },
                 dialogVisible:false,
                 dialogVisible2:false,
@@ -98,17 +99,30 @@
         },
         methods:{
             addXj(){
-
+                this.add_Grade();
             },
             deleteEvent(){
-
+                // var params = {id:this.change.id};
+                // var res =  await delGrade(params);
+                // if(res.code ==200){
+                //     this.$message(res.message);
+                // }
             },
+            delClick(id){
+                this.dialogVisible2 = true;
+                this.change.id = id;
+            },
+            //编辑点击事件
             bjClick(id,grade){
                 this.bjxj = true;
                 this.form.bjxj = grade;
                 this.change.bjid = id;
                 // console.log("form.bjxj==="+this.form.bjxj);
                 // console.log("change.bjid==="+this.change.bjid);
+            },
+            //编辑框点击确定事件
+            bjxj_submit(){
+                this.edit_Grade();
             },
             //初始化学级管理
             init_college_GradeList(){
@@ -121,6 +135,25 @@
                 if(res.code ==200){
                     this.list.xj = res.data;
                 }
+            },
+            async edit_Grade(){
+                var params = {grade:this.form.bjxj,
+                              id:this.change.bjid};
+                var res =  await editGrade(params);
+                if(res.code ==200){
+                    this.bjxj = false;
+                    this.college_GradeList();
+                }
+                this.$message(res.message);
+            },
+            async add_Grade(){
+                var params = {grade:this.form.xj};
+                var res =  await addGrade(params);
+                if(res.code ==200){
+                    this.bjxj = false;
+                    this.college_GradeList();
+                }
+                this.$message(res.message);
             },
         },
         mounted(){
