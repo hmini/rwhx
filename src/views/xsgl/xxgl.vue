@@ -20,7 +20,7 @@
                 </el-select>
             </el-form-item>
              <el-form-item label="">
-                <el-select v-model="form.zy" placeholder="专业">
+                <el-select v-model="form.zy" placeholder="专业" @change="zychange">
                     <el-option  v-for="item in searchList.zy"
                         :key="item.code"
                         :label="item.name"
@@ -38,11 +38,11 @@
                 </el-select>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
+                <el-button type="primary" @click="onSubmit()" v-loading="loading">查询</el-button>
             </el-form-item>
         </el-form>
         <div class="align-left padding-left-20">
-            <router-link to="/xxglAdd"><el-button type="primary">新增学生</el-button></router-link>
+        <el-button type="primary" @click="linkPage()">新增学生</el-button>
             <el-button type="info">删除选择项</el-button>
             <div class="right search">
                 <el-input class=""></el-input>
@@ -57,7 +57,8 @@
             style="width: 100%"
             align="center"
              :row-class-name="tableRowClassName"
-             @selection-change="handleSelectionChange">
+             @selection-change="handleSelectionChange"
+             v-loading="tableLoading">
                 <el-table-column
                     type="selection"
                     width="" >
@@ -146,7 +147,8 @@ export default {
                 zy:'',
                 bj:'',
             },
-            
+            loading:false,
+            tableLoading:false,
             tableData:[],
             searchList:{
                 xj:[
@@ -171,6 +173,7 @@ export default {
 
         },
         onSubmit(){
+        this.loading = true;
           this.studentList();  
         },
         handleCurrentChange(val) {
@@ -179,6 +182,9 @@ export default {
         },
         kxChange() {
             this.zyList();
+        },
+        zychange(){
+            this.bjList();
         },
         tableRowClassName({row, rowIndex}) {
             if (rowIndex === 1) {
@@ -191,8 +197,10 @@ export default {
         handleClick(row){
 
         },
-        // 学级
+        // 学生信息list
          async studentList(){
+           
+             this.tableLoading = true;
             var params = {
                 grade_id:this.form.xj,
                 department_id:this.form.kx,
@@ -204,12 +212,18 @@ export default {
             };
             var res =  await stuList(params);
                 if(res.code ==200){
+                    this.loading = false;
+                    this.tableLoading = false;
                 this.tableData = res.data.list;
                 this.page.pageNum = res.data.pageNum;
                 this.page.pageSize = res.data.pageSize;
                 this.page.firstPage = res.data.firstPage;
                 this.page.total = res.data.total;
                 this.page.currentPage = res.data.pageNum;
+            }else{
+               this.loading = false;
+                this.tableLoading = false;
+                this.$message(res.message);
             }
                 
                 console.log(res)
@@ -222,7 +236,9 @@ export default {
             // console.log(res);
             if(res.code==200){
                 this.searchList.xj = res.data;
-            }
+            }else{
+             this.$message(res.message);  
+           }
          },
          // 选择科系
          async kxList(){
@@ -231,7 +247,9 @@ export default {
             // console.log(res)
             if(res.code==200){
                 this.searchList.kx = res.data;
-            }
+            }else{
+             this.$message(res.message);  
+           }
          },
          // 选择专业
          async zyList(){
@@ -244,23 +262,29 @@ export default {
          },
           // 选择班级
          async bjList(){
-            var params = { };
+            var params = {
+                grade_id:this.form.xj,
+                specialty_id:this.form.bj
+
+             };
             var res =  await dicTeam(params);
-                // console.log(res)
             if(res.code==200){
                 this.searchList.bj = res.data;
-            }
+            }else{
+             this.$message(res.message);  
+           }
          },
 
-        
+        linkPage(){
+             this.$router.push({path: '/xxglAdd'});
+
+        }
 
     },
     mounted(){
         this.studentList();
         this.kxList();
         this.xjList();
-        this.kxList();
-        this.bjList();
     }
 }
 </script>

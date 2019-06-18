@@ -443,6 +443,8 @@ export default {
                 this.addForm.initial=0,
                 this.addForm.type='0',
                 this.list();
+           }else{
+             this.$message(res.message);  
            }
       },
       async editFunction(){
@@ -462,6 +464,8 @@ export default {
                 this.addForm.type='0',
                  this.addForm.id='',
                 this.list();
+           }else{
+             this.$message(res.message);  
            }
       },
        deleteif(id){

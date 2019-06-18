@@ -45,9 +45,9 @@ export const gradeList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
 };
 //  * 学级列表
-export const gradeList = (params, method) => {
-  return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
-};
+// export const gradeList = (params, method) => {
+//   return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
+// };
 //  * 添加学级
 export const addGrade = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/addGrade`, params, method);
