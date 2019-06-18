@@ -131,13 +131,25 @@
                  @current-change="handleCurrentChange"
                 :current-page.sync="page.currentPage">
             </el-pagination>
+
+
+            <el-dialog
+                title="删除"
+                :visible.sync="dialogVisible"
+                width="30%">
+                <span>您确定要删除这个指标</span>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="deleteList()">确 定</el-button>
+                </span>
+            </el-dialog>
             
         </div>
     </div>
 </template>
 <script>
 import { mapMutations } from 'vuex';
-import {dicGrade,dicDepartment,dicSpecialty,dicTeam,dicRole,stuList} from '@/api';
+import {dicGrade,dicDepartment,dicSpecialty,dicTeam,dicRole,stuList,delQuota} from '@/api';
   import { jquery } from '@/script/jquery-1.7.1';
 export default {
     data(){
@@ -149,6 +161,7 @@ export default {
                 bj:'',
                 key:''
             },
+            dialogVisible:false,
             loading:false,
             tableLoading:false,
             tableData:[],
@@ -160,6 +173,7 @@ export default {
                 zy:'',
                 bj:'',
             },
+            deleteid:'',
             page:{
                 pageSize:10,
                 pageNum:1,
@@ -176,7 +190,9 @@ export default {
 
         },
         deleteClick(row){
-
+            this.dialogVisible =true;
+           this.deleteid  =  row.id;
+            
         },
         onSubmit(){
         this.loading = true;
@@ -280,6 +296,18 @@ export default {
             }else{
              this.$message(res.message);  
            }
+         },
+         async deleteList(){
+             var params={
+                 id:this.deleteid
+             };
+              var res =  await delQuota(params);
+              if(res.code == 200){
+                  this.$message(res.message);
+                  this.studentList();
+              }else{
+                 this.$message(res.message); 
+              }
          },
 
         linkPage(){
