@@ -140,7 +140,7 @@
 </template>
 <script>
     import { mapMutations } from 'vuex';
-  import {dicGrade,dicDepartment} from '@/api';
+  import {dicGrade,dicDepartment,teamList} from '@/api';
   import { jquery } from '@/script/jquery-1.7.1';
     export default {
         data(){
@@ -177,10 +177,12 @@
             kxClick(code,index){
                 this.showBack = index;
                 this.kxCode = code;
+                this.bjList();
             },
             njClick(code,index){
                 this.showBack2 = index;
                 this.njCode = code;
+                this.bjList();
             },
             qbClick(){
                 this.showBack = 'qb';
@@ -194,33 +196,48 @@
             inputFocus(){
                 $(this).addClass('addborder');
             },
+            // 选择科系
+            async bjList(){
+                var params = {
+                    specialty_parent_id:this.kxCode,
+                    grade_id:this.njCode,
+                };
+                var res =  await teamList(params);
+                // console.log(res)
+                if(res.code==200){
+                    console.log(res)
+                }else{
+                this.$message(res.message);  
+                }
+            },
             // 学级
-                async xjList(){
-                    var params = {};
-                    var res =  await dicGrade(params);
-                    console.log(res);
-                    if(res.code==200){
-                        this.searchList.xj = res.data;
-                    }else{
-                    this.$message(res.message);  
+            async xjList(){
+                var params = {};
+                var res =  await dicGrade(params);
+                console.log(res);
+                if(res.code==200){
+                    this.searchList.xj = res.data;
+                }else{
+                this.$message(res.message);  
+            }
+            },
+            // 选择科系
+            async kxList(){
+                var params = {};
+                var res =  await dicDepartment(params);
+                // console.log(res)
+                if(res.code==200){
+                    this.searchList.kx = res.data;
+                }else{
+                this.$message(res.message);  
                 }
-                },
-                // 选择科系
-                async kxList(){
-                    var params = {};
-                    var res =  await dicDepartment(params);
-                    // console.log(res)
-                    if(res.code==200){
-                        this.searchList.kx = res.data;
-                    }else{
-                    this.$message(res.message);  
-                }
-                },
+            },
         },
         mounted(){
             this.clickEvent();
             this.kxList();
             this.xjList();
+            this.bjList();
         }
     }
 </script>

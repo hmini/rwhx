@@ -337,7 +337,7 @@ export default {
                 score:this.addForm.score,
                 criterion_id:this.addForm.criterion_id,
                 type:this.addForm.type,
-                bf:this.addForm.bz
+                bz:this.addForm.bz
             };
             var res =  await addScore(params);
             console.log(res);
