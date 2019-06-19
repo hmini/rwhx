@@ -108,8 +108,13 @@ export const usersList = (params, method) => {
 export const delQuota = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/quota/delQuota`, params, method);
 };
+
 //学院管理
 //学级管理
 export const collegeGradeList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
+};
+//专业列表
+export const specialtyList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/specialtyList`, params, method);
 };

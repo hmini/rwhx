@@ -11,32 +11,28 @@
                 </div>
                 <div class="width100 zynr">
                    <table class="width100">
-                      <tbody>
+                      <tbody v-for="(item,index) in list.kx" :key="index">
                           <tr class="">
-                              <td :rowspan="item">111</td>
+                              <td :rowspan="item.sonMenu.length+1">{{item.mainMenu.department}}</td>
                           </tr>
-                          <tr class="border-bottom">
-                              <td>11</td>
+                          <tr class="border-bottom" v-for="(item2,index2) in item.sonMenu" :key="index2">
+                              <td>{{item2.specialty}}</td>
                               <td>
-                                  <el-button class="buttonback" @click="dialogVisible = true">编辑</el-button>
+                                  <!-- <el-button class="buttonback" @click="dialogVisible = true">编辑</el-button>
+                                  <el-button class="buttonback" @click="dialogVisible2 = true">删除</el-button> -->
+                                  <el-button class="buttonback" @click="zybj(item2.id,item2.specialty)">编辑</el-button>
                                   <el-button class="buttonback" @click="dialogVisible2 = true">删除</el-button>
-                              </td>
+                              </td>·
                           </tr>
-                          <tr class="border-bottom">
+                    </tbody>
+                          <!-- <tr class="border-bottom">
                               <td>11</td>
                               <td>
                                   <el-button class="buttonback">编辑</el-button>
                                   <el-button class="buttonback">删除</el-button>
                               </td>
-                          </tr>
-                          <tr class="border-bottom">
-                              <td>11</td>
-                              <td>
-                                  <el-button class="buttonback">编辑</el-button>
-                                  <el-button class="buttonback">删除</el-button>
-                              </td>
-                          </tr>
-                          <tr class="">
+                          </tr> -->
+                          <!-- <tr class="">
                               <td :rowspan="item">111</td>
                           </tr>
                           <tr class="border-bottom">
@@ -59,10 +55,8 @@
                                   <el-button class="buttonback">编辑</el-button>
                                   <el-button class="buttonback">删除</el-button>
                               </td>
-                          </tr>
-                          
-                          
-                      </tbody>
+                          </tr> -->
+                      <!-- </tbody> -->
                    </table>
                    
                     
@@ -74,16 +68,14 @@
                 width="30%" class="align-left">
                 <div>   
                     <el-form>
-                        <el-form-item label="科系名称">
-                              <el-select>
+                        <!-- <el-form-item label="专业名称">
+                            <el-select v-model="form.zy" >
                                     <el-option label="shneme"  value="0"></el-option>
-                                </el-select>
-                        </el-form-item>
+                            </el-select>
+                        </el-form-item> -->
                         <el-form-item label="专业名称">
                                <el-input></el-input> 
                         </el-form-item>
-                      
-                  
                     </el-form>
                    
                 </div>
@@ -106,21 +98,50 @@
     </div>
 </template>
 <script>
+    import { mapMutations } from 'vuex';
+    import {specialtyList} from '@/api';
+    import { jquery } from '@/script/jquery-1.7.1';
     export default {
         data(){
             return{
                 dialogVisible:false,
                 dialogVisible2:false,
-                item:4
+                item:4,
+                list:{
+                    kx:'',
+                    kxSonList:'',
+                },
+                form:{
+                    kx:'',
+                    zy:
+                }
             }
         },
         methods:{
             addXj(){
-
             },
             deleteEvent(){
 
-            }
+            },
+            //初始化科系列表
+            initKxList(){
+                this.init_KxList();
+            },
+            //编辑点击事件
+            zybj(id,specialty){
+                this.dialogVisible= true;
+            },
+            async init_KxList(){
+                var params = {};
+                var res =  await specialtyList(params);
+                if(res.code ==200){
+                    this.list.kx = res.data;
+                    console.log(this.list.kx);
+                }
+            },
+        },
+        mounted(){
+            this.initKxList();
         }
     }
 </script>
