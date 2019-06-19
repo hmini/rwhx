@@ -114,8 +114,7 @@ export const dicRole = (params, method) => {
 export const usersList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/dic/usersList`, params, method);
 };
-
-// 选择学期
+//学期列表
 export const termList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/termList`, params, method);
 };
@@ -144,4 +143,20 @@ export const addSpecialty = (params, method) => {
 //添加专业
 export const delSpecialty = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/delSpecialty`, params, method);
+};
+// 学院下的学期列表
+export const xytermList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/termList`, params, method);
+};
+// 学院下的学期列表修改
+export const editTerm = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/editTerm`, params, method);
+};
+// 学院下的学期列表添加
+export const addTerm = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/addTerm`, params, method);
+};
+// 学院下的学期列表删除
+export const delTerm = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/delTerm`, params, method);
 };
