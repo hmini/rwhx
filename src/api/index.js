@@ -53,6 +53,14 @@ export const stuOne = (params, method) => {
 export const delStu = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/stu/delStu`, params, method);
 };
+//学生评价List
+export const scoreList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/stu/scoreList`, params, method);
+};
+//添加评分
+export const addScore = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/stu/addScore`, params, method);
+};
 
 
 
@@ -103,6 +111,11 @@ export const dicRole = (params, method) => {
 // 选择老师
 export const usersList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/dic/usersList`, params, method);
+};
+
+// 选择学期
+export const termList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/termList`, params, method);
 };
 //删除字典
 export const delQuota = (params, method) => {
