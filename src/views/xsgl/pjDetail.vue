@@ -342,6 +342,7 @@ export default {
             var res =  await addScore(params);
             console.log(res);
             if(res.code==200){
+                 this.dialogVisible = false;
                 // this.xq = res.data;
                 // // this.form.xq = res.data[0].id;
                 // this.list();
