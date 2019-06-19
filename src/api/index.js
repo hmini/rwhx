@@ -133,3 +133,15 @@ export const collegeGradeList = (params, method) => {
 export const specialtyList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/specialtyList`, params, method);
 };
+//修改专业
+export const editSpecialty = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/editSpecialty`, params, method);
+};
+//添加专业
+export const addSpecialty = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/addSpecialty`, params, method);
+};
+//添加专业
+export const delSpecialty = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/delSpecialty`, params, method);
+};
