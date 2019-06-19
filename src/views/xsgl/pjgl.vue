@@ -211,7 +211,6 @@ export default {
         },
         // 学生信息list
          async studentList(){
-           
              this.tableLoading = true;
             var params = {
                 grade_id:this.form.xj,
@@ -224,8 +223,8 @@ export default {
             };
             var res =  await stuList(params);
                 if(res.code ==200){
-                    this.loading = false;
-                    this.tableLoading = false;
+                this.loading = false;
+                this.tableLoading = false;
                 this.tableData = res.data.list;
                 this.page.pageNum = res.data.pageNum;
                 this.page.pageSize = res.data.pageSize;

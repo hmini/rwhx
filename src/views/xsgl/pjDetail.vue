@@ -19,7 +19,6 @@
                         :value="item.id">
                     </el-option>
                     </el-select>
-
                 </el-form-item>    
                  <el-form-item>
                     <el-button type="primary" @click="list()">查询</el-button>
@@ -118,6 +117,9 @@
                                                 <span>初始分值:0.00</span><br/>
                                                 <span> <i>参考分值:0.00</i> <i>当前值:0.00</i> <i>已加分:0.00</i><i>加分次数:0.00</i></span>
                                             </p>
+                                            <p>
+                                                <el-button type="text" @click="addPf(item.id)">添加评分</el-button>
+                                            </p>
                                         </td>
                                       
                                     </tr>
@@ -141,7 +143,7 @@
                                             <el-option label="减分" value="1"></el-option>
                                         </el-select>
                                     </el-form-item>
-                                     <el-form-item label="参考分值" prop="bz">
+                                     <el-form-item label="备注" prop="bz">
                                         <el-input v-model="addForm.bz" type="textarea"></el-input>
                                     </el-form-item>
                                 </el-form>
@@ -172,7 +174,7 @@
 </template>
 <script>
   import { mapMutations } from 'vuex';
-  import { pjgzList,weightEdit,addQuota,delQuota,editQuota,termList,scoreList,addScore} from '@/api';
+  import { pjgzList,termList,scoreList,addScore} from '@/api';
   import { jquery } from '@/script/jquery-1.7.1';
 export default {
     data(){
@@ -214,7 +216,7 @@ export default {
         fourList:[],
         kongList:[],
         isActive:false,
-        dialogVisible:true,
+        dialogVisible:false,
         dialogVisible2:false,
         addForm:{
             standard:'',
@@ -224,6 +226,8 @@ export default {
             id:'',
             parent_id:'',
             bz:'',
+            criterion_id:''
+            
         },
         deleteId:'',
         rules:{
@@ -330,9 +334,10 @@ export default {
             var params = {
                 student_id:this.$route.query.id,
                 term_id:this.form.xq,
-                criterion_id:'',
+                score:this.addForm.score,
+                criterion_id:this.addForm.criterion_id,
                 type:this.addForm.type,
-                bf:this.addForm.bf
+                bf:this.addForm.bz
             };
             var res =  await addScore(params);
             console.log(res);
@@ -344,6 +349,10 @@ export default {
             }else{
              this.$message(res.message);  
             }
+        },
+        addPf(id){
+            this.dialogVisible = true;
+            this.addForm.criterion_id = id;
         },
       submitForm(formName){
            this.$refs[formName].validate((valid) => {

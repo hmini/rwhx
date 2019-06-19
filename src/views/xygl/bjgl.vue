@@ -2,14 +2,13 @@
     <div class="page page-bjgl">
         <el-container>
               <el-main>
-                  <div class="selectButton over"  v-for="(item,index) in kxList" :key="index">
-                      <div class="left kx-title" >{{item.name}}</div> 
-                      <div class="left" id="clickEvent">
+                  <div class="selectButton over" >
+                      <div class="left kx-title" >科系:</div> 
+                      <div class="left" id="clickEvent" >
                             <el-button class="active">全部</el-button>
-                            <el-button   v-for="(tem,key) in item.nr" :key="key" :bh="tem.bh">{{tem.name}}</el-button>
+                            <el-button v-for="(item,index) in searchList.kx" :key="index" :bh="item.code" v-model="item.code">{{item.name}}</el-button>
                       </div>
                   </div>
-                 
                     <div>
                         <div class="over width100 zynr">
                             <div class="xi-contain">
@@ -133,6 +132,9 @@
     </div>
 </template>
 <script>
+    import { mapMutations } from 'vuex';
+  import {dicGrade,dicDepartment} from '@/api';
+  import { jquery } from '@/script/jquery-1.7.1';
     export default {
         data(){
             return{
@@ -144,44 +146,12 @@
                 value:'16-17',
                 label:'',
                 disabled:true,
-                kxList:[
-                    {
-                        name:'科系',
-                        nr:[
-                           {
-                             name:'科系1',
-                             bh:'',   
-                            },
-                            {
-                                name:'科系2',
-                                bh:'',   
-                            },
-                            {
-                                name:'科系3',
-                                bh:'',   
-                            } 
-                        ]
-
+                    searchList:{
+                        xj:[],
+                        kx:'',
+                        zy:'',
+                        bj:'',
                     },
-                    {
-                        name:'科系',
-                        nr:[
-                           {
-                                name:'科系1',
-                                bh:'',   
-                            },
-                            {
-                                name:'科系2',
-                                bh:'',   
-                            },
-                            {
-                                name:'科系3',
-                                bh:'',   
-                            } 
-                        ]
-
-                    },
-                    ],
                   
                 }
             },
@@ -201,11 +171,34 @@
             },
             inputFocus(){
                 $(this).addClass('addborder');
-                alert(1)
-            }
+            },
+            // 学级
+                async xjList(){
+                    var params = {};
+                    var res =  await dicGrade(params);
+                    console.log(res);
+                    if(res.code==200){
+                        this.searchList.xj = res.data;
+                    }else{
+                    this.$message(res.message);  
+                }
+                },
+                // 选择科系
+                async kxList(){
+                    var params = {};
+                    var res =  await dicDepartment(params);
+                    // console.log(res)
+                    if(res.code==200){
+                        this.searchList.kx = res.data;
+                    }else{
+                    this.$message(res.message);  
+                }
+                },
         },
         mounted(){
-            this.clickEvent()
+            this.clickEvent();
+            this.kxList();
+            this.xjList();
         }
     }
 </script>
@@ -289,9 +282,7 @@
                  }
 
             }
-        }
-       
-        
+        }    
     }
     
 </style>
