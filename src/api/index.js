@@ -62,14 +62,16 @@ export const addScore = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/stu/addScore`, params, method);
 };
 
-
-
-
 // 学级管理list
 export const gradeList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/gradeList`, params, method);
 };
 
+
+// 班级list
+export const teamList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/teamList`, params, method);
+};
 
 
 

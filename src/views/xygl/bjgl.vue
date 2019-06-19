@@ -5,8 +5,15 @@
                   <div class="selectButton over" >
                       <div class="left kx-title" >科系:</div> 
                       <div class="left" id="clickEvent" >
-                            <el-button class="active">全部</el-button>
-                            <el-button v-for="(item,index) in searchList.kx" :key="index" :bh="item.code" v-model="item.code">{{item.name}}</el-button>
+                            <el-button  v-bind:class="{active:showBack == 'qb'}" @click="kxClick('','qb')">全部</el-button>
+                            <el-button v-for="(item,index) in searchList.kx" :key="index" :bh="item.code" v-model="item.code" v-bind:class="{active:showBack == index}" @click="kxClick(item.code,index)">{{item.name}}</el-button>
+                      </div>
+                  </div>
+                  <div class="selectButton over" >
+                      <div class="left kx-title" >学级:</div> 
+                      <div class="left clickEvent">
+                            <el-button  v-bind:class="{active:showBack2 == 'qb'}" @click="njClick('','qb')">全部</el-button>
+                            <el-button v-for="(item,index) in searchList.xj" :key="index" :bh="item.code" v-model="item.code" v-bind:class="{active:showBack2 == index}" @click="njClick(item.code,index)">{{item.name}}</el-button>
                       </div>
                   </div>
                     <div>
@@ -145,13 +152,17 @@
                 key:0,
                 value:'16-17',
                 label:'',
+                showBack:'qb',
+                showBack2:'qb',
                 disabled:true,
-                    searchList:{
-                        xj:[],
-                        kx:'',
-                        zy:'',
-                        bj:'',
-                    },
+                searchList:{
+                    xj:[],
+                    kx:'',
+                    zy:'',
+                    bj:'',
+                },
+                kxCode:'',
+                njCode:'',
                   
                 }
             },
@@ -162,6 +173,17 @@
             },
             deleteEvent(){
 
+            },
+            kxClick(code,index){
+                this.showBack = index;
+                this.kxCode = code;
+            },
+            njClick(code,index){
+                this.showBack2 = index;
+                this.njCode = code;
+            },
+            qbClick(){
+                this.showBack = 'qb';
             },
             clickEvent(){
                 $('#clickEvent>button').click(function(){
