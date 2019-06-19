@@ -130,26 +130,25 @@
                             :visible.sync="dialogVisible"
                             width="30%" class="align-left">
                                 <el-form :label-position="labelPosition" :model="addForm" :rules="rules" ref="addForm">
-                                    <el-form-item label="指标" prop="name">
-                                        <el-input v-model="addForm.name"></el-input>
+                                   
+                                   
+                                    <el-form-item label="分数"  prop="score">
+                                        <el-input v-model="addForm.score"></el-input>
                                     </el-form-item>
-                                    <el-form-item label="参考分值" prop="standard">
-                                        <el-input v-model="addForm.standard"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="初始分值" v-show="listPd == true" prop="initial">
-                                        <el-input v-model="addForm.initial"></el-input>
-                                    </el-form-item>
-                                    <el-form-item label="评分方式" v-show="listPd == true" prop="type">
+                                    <el-form-item label="评分方式"  prop="type">
                                          <el-select v-model="addForm.type" placeholder="请选择评分方式">
                                             <el-option label="加分" value="0" ></el-option>
                                             <el-option label="减分" value="1"></el-option>
                                         </el-select>
                                     </el-form-item>
+                                     <el-form-item label="参考分值" prop="bz">
+                                        <el-input v-model="addForm.bz" type="textarea"></el-input>
+                                    </el-form-item>
                                 </el-form>
                             <span slot="footer" class="dialog-footer">
                                 <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
-                                <el-button type="primary" @click="submitForm('addForm')" v-if="edit == false">保存</el-button>
-                                 <el-button type="primary" @click="submitFormedit('addForm') " v-show="edit == true">保存</el-button>
+                                <el-button type="primary" @click="submitForm('addForm')">保存</el-button>
+                                 <!-- <el-button type="primary" @click="submitFormedit('addForm') ">保存</el-button> -->
                             </span>
                         </el-dialog>
                         <el-dialog
@@ -173,7 +172,7 @@
 </template>
 <script>
   import { mapMutations } from 'vuex';
-  import { pjgzList,weightEdit,addQuota,delQuota,editQuota,termList,scoreList } from '@/api';
+  import { pjgzList,weightEdit,addQuota,delQuota,editQuota,termList,scoreList,addScore} from '@/api';
   import { jquery } from '@/script/jquery-1.7.1';
 export default {
     data(){
@@ -215,27 +214,25 @@ export default {
         fourList:[],
         kongList:[],
         isActive:false,
-        dialogVisible:false,
+        dialogVisible:true,
         dialogVisible2:false,
         addForm:{
             standard:'',
             name:'', 
-            initial:'0', 
+            score:'0', 
             type:'0',
             id:'',
             parent_id:'',
+            bz:'',
         },
         deleteId:'',
         rules:{
             name:[
                { required: true, message: '请输入指标内容', trigger: 'blur' }
             ],
-            standard:[
-               { validator: checkfz, trigger: 'blur' }
-            ],
-            // initial:[
-            //     { required: true, message: '初始分值不能为空', trigger: 'blur' }
-            // ]  
+            score:[
+               {validator: checkfz, trigger: 'blur' }
+            ], 
         },
         labelPosition:'top',
         listPd:false,
@@ -328,6 +325,26 @@ export default {
              this.$message(res.message);  
             }
         },
+         // 添加评分
+         async addFunction(){
+            var params = {
+                student_id:this.$route.query.id,
+                term_id:this.form.xq,
+                criterion_id:'',
+                type:this.addForm.type,
+                bf:this.addForm.bf
+            };
+            var res =  await addScore(params);
+            console.log(res);
+            if(res.code==200){
+                // this.xq = res.data;
+                // // this.form.xq = res.data[0].id;
+                // this.list();
+
+            }else{
+             this.$message(res.message);  
+            }
+        },
       submitForm(formName){
            this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -336,19 +353,7 @@ export default {
             return false;
           }
         });
-      },
-      submitFormedit(formName){
-          this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.editFunction()
-          } else {
-            return false;
-          }
-        });
-      },
-    
-    
-
+      } 
     },
     mounted(){
         this.xqList();

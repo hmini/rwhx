@@ -9,10 +9,10 @@
                     <div class="login">
                         <el-form :label-position="labelPosition" label-width="80px" :model="form">
                             <el-form-item label="用户名">
-                                <el-input v-model="form.username"></el-input>
+                                <el-input v-model="form.username"  @keyup.enter="submitForm('form')"></el-input>
                             </el-form-item>
                             <el-form-item label="密码">
-                                <el-input v-model="form.password"></el-input>
+                                <el-input v-model="form.password"  @keyup.enter="submitForm('form')"></el-input>
                             </el-form-item>
                             <el-form-item>
                                 <el-button type="primary" @click="submitForm('form')"   @keyup.enter="submitForm('form')">登录</el-button>
