@@ -58,7 +58,7 @@
           <div class="over">
               <div class="left dbxq">
                   <ul class="dbnr">
-                    <li v-for="(item,index) in dbData" :key="index" v-show="dbData.length!==0">
+                    <li v-for="(item,index) in dataidpush" :key="index" v-show="dbData.length!==0">
                        <span v-show="item.kx !== ''">{{item.kx}}</span>
                        <span v-show="item.kx !== ''&& item.zy !== ''">>>></span>
                        <span  v-show="item.zy !== ''">{{item.zy}}</span>
@@ -68,7 +68,7 @@
                        <span  v-show="item.xs !== ''">{{item.xs}}</span>
                        <span v-show="item.xs !== ''&& item.xq !== ''">>>></span>
                        <span  v-show="item.xq!== ''">{{item.xq}}</span>
-                       <span class="delete-db">x</span>
+                       <span class="delete-db" @click="deleteDb(index)">x</span>
                     </li>
                   </ul>
               </div>
@@ -114,13 +114,7 @@ export default {
          xq:'',
        },
        dataidpush:[],
-       dataPush:{
-            kx:'',
-            zy:'',
-            bj:'',
-            xs:'',
-            xq:''
-       },
+       dataPush:[],
        dbData:[],
        option: {
             title: {
@@ -175,23 +169,27 @@ export default {
       onSubmit(){
         this.tb(0)
       },
+      deleteDb(index){
+         this.dataidpush =delete this.dataidpush[index];
+      },
       echartXr(){
         this.chart = this.$echarts.init(document.getElementById('leida'));
         this.chart.setOption(this.option);
       },
        zjdb(){
          this.dataidpush.push(this.form);
+         this.dataPush.push(this.formName);
             // this.dataPush.kx = this.formName.kx;
             // this.dataPush.zy = this.formName.zy;
             // this.dataPush.bj = this.formName.bj;
             // this.dataPush.xs = this.formName.xs;
             // this.dataPush.xq = this.formName.xq;
             console.log(this.dataPush);
-            console.log(this.formName.kx);
-            console.log(this.formName.xq);
-            console.log(this.formName.bj);
-            console.log(this.formName.xs);
-            console.log(this.formName.xq);
+            // console.log(this.formName.kx);
+            // console.log(this.formName.xq);
+            // console.log(this.formName.bj);
+            // console.log(this.formName.xs);
+            // console.log(this.formName.xq);
 
             // if(this.form.kx !='' 
             // || this.form.zy !=''
@@ -278,13 +276,14 @@ export default {
              };
             var res =  await dicStu(params);
             if(res.code==200){
-                this.search.bj = res.data;
+                this.search.xs = res.data;
             }else{
              this.$message(res.message);  
            }
          },
          kxchange(){
             this.formName.kx = this.aquireLabel(this.search.kx,this.form.kx).name;
+            console.log(this.formName.kx)
             this.zyList();
          },
          zychange(){
