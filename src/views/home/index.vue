@@ -4,58 +4,70 @@
         <el-main class="align-left over" >
            <el-form :inline="true" :model="form" class="demo-form-inline align-left left">
              <el-form-item label="">
-                <el-select v-model="form.xj" placeholder="科系">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="form.kx" placeholder="请选择科系" @change="kxchange()">
+                    <el-option  v-for="item in search.kx"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code">
+                    </el-option>
                 </el-select>
             </el-form-item>
              <el-form-item label="">
-                <el-select v-model="form.xj" placeholder="专业">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="form.zy" placeholder="请选择专业"  @change="zychange()">
+                  <el-option  v-for="item in search.zy"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code">
+                    </el-option>
                 </el-select>
             </el-form-item>
              <el-form-item label="">
-                <el-select v-model="form.xj" placeholder="专业所在班级">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="form.bj" placeholder="选择专业所在班级" @change="bjchange()">
+                  <el-option  v-for="item in search.bj"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code">
+                    </el-option>
                 </el-select>
             </el-form-item>
              <el-form-item label="">
-                <el-select v-model="form.xj" placeholder="专业所在班级">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="form.xs" placeholder="选择学生" @change="xsChange()">
+                  <el-option  v-for="item in search.xs"
+                            :key="item.code"
+                            :label="item.name"
+                            :value="item.code">
+                    </el-option>
                 </el-select>
             </el-form-item>
              <el-form-item label="">
-                <el-select v-model="form.xj" placeholder="专业所在班级">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="form.xq" placeholder="选择学期" @change="xname()">
+                     <el-option  v-for="item in search.xq"
+                        :key="item.id"
+                        :label="item.term"
+                        :value="item.id">
+                    </el-option>
                 </el-select>
             </el-form-item>
         </el-form>
           <div class="button-style left">
-            <el-button type="primary" @click="onSubmit">增加对比</el-button>
-             <el-button type="primary" @click="onSubmit">生成图表</el-button>
+            <el-button type="primary" @click="zjdb()">增加对比</el-button>
+             <el-button type="info" @click="onSubmit">生成图表</el-button>
               <router-link to="/pjgz" class="tolinht"><el-button type="text">进入后台</el-button></router-link>
           </div>
           <div class="clear"></div>
           <div class="over">
               <div class="left dbxq">
                   <ul class="dbnr">
-                    <li>
-                       <span>会计</span>
-                       <span>>>></span>
-                       <span class="delete-db">x</span>
-                    </li>
-                    <li>
-                       <span>会计</span>
-                       <span>>>></span>
-                       <span class="delete-db">x</span>
-                    </li>
-                    <li>
-                       <span>会计</span>
-                       <span>>>></span>
+                    <li v-for="(item,index) in dbData" :key="index" v-show="dbData.length!==0">
+                       <span v-show="item.kx !== ''">{{item.kx}}</span>
+                       <span v-show="item.kx !== ''&& item.zy !== ''">>>></span>
+                       <span  v-show="item.zy !== ''">{{item.zy}}</span>
+                        <span v-show="item.zy !== ''&& item.bj !== ''">>>></span>
+                        <span  v-show="item.bj !== ''">{{item.bj}}</span>
+                        <span v-show="item.bj !== ''&& item.xs !== ''">>>></span>
+                       <span  v-show="item.xs !== ''">{{item.xs}}</span>
+                       <span v-show="item.xs !== ''&& item.xq !== ''">>>></span>
+                       <span  v-show="item.xq!== ''">{{item.xq}}</span>
                        <span class="delete-db">x</span>
                     </li>
                   </ul>
@@ -76,13 +88,40 @@
 </template>
 <script>
   import { mapMutations } from 'vuex';
+  import {dicDepartment,dicSpecialty,dicTeamZy,termList,dicStu,makeTb} from '@/api';
   import { jquery } from '@/script/jquery-1.7.1';
 export default {
     data(){
       return{
        form:{
-         xj:'',
+         kx:'',
+         zy:'',
+         bj:'',
+         xs:'',
+         xq:'',
        },
+       search:{
+         kx:'',
+         zy:'',
+         xq:'',
+
+       },
+       formName:{
+         kx:'',
+         zy:'',
+         bj:'',
+         xs:'',
+         xq:'',
+       },
+       dataidpush:[],
+       dataPush:{
+            kx:'',
+            zy:'',
+            bj:'',
+            xs:'',
+            xq:''
+       },
+       dbData:[],
        option: {
             title: {
                 text: '基础雷达图'
@@ -134,17 +173,153 @@ export default {
     },
     methods:{
       onSubmit(){
-
+        this.tb(0)
       },
       echartXr(){
         this.chart = this.$echarts.init(document.getElementById('leida'));
         this.chart.setOption(this.option);
-      }
-    
+      },
+       zjdb(){
+         this.dataidpush.push(this.form);
+            // this.dataPush.kx = this.formName.kx;
+            // this.dataPush.zy = this.formName.zy;
+            // this.dataPush.bj = this.formName.bj;
+            // this.dataPush.xs = this.formName.xs;
+            // this.dataPush.xq = this.formName.xq;
+            console.log(this.dataPush);
+            console.log(this.formName.kx);
+            console.log(this.formName.xq);
+            console.log(this.formName.bj);
+            console.log(this.formName.xs);
+            console.log(this.formName.xq);
 
+            // if(this.form.kx !='' 
+            // || this.form.zy !=''
+            // || this.form.bj !=''
+            // || this.form.xs !=''
+            // || this.form.xq !=''){
+            //   this.dbData.push(dataPush)
+            // }
+            this.dbData.push(this.dataPush)
+
+            
+        },
+     
+        aquireLabel2(arr,id){
+            var obj = {};
+              obj = arr.find(function(item){
+                return item.id === id 
+              });
+              return obj
+        },  
+         aquireLabel(arr,id){
+            var obj = {};
+              obj = arr.find(function(item){
+                return item.code === id
+              });
+              
+              return obj
+        }, 
+             // 首页图标
+        async tb(id){
+            var params = {
+              data:JSON.stringify(this.dataidpush),
+              id:id
+            }
+            var res =  await makeTb(params);
+            // console.log(res)
+            if(res.code==200){
+               console.log(res)
+            }else{
+             this.$message(res.message);  
+           }
+         },
+      // 选择科系
+         async kxList(){
+            var params = {};
+            var res =  await dicDepartment(params);
+            // console.log(res)
+            if(res.code==200){
+                this.search.kx = res.data;
+            }else{
+             this.$message(res.message);  
+           }
+         },
+         // 选择专业
+         async zyList(name){
+           
+            console.log(this.formName.kx)
+            var params = {id:this.form.kx};
+            this.formName.kx = name;
+            var res =  await dicSpecialty(params);
+            if(res.code==200){
+                this.search.zy = res.data;
+            }
+         },
+          // 选择班级
+         async bjList(name){
+         
+            var params = {
+                specialty_id:this.form.zy
+
+             };
+            var res =  await dicTeamZy(params);
+            if(res.code==200){
+                this.search.bj = res.data;
+            }else{
+             this.$message(res.message);  
+           }
+         },
+          // 选择学生
+         async xsList(name){
+        
+           var params = {
+                team_id:this.form.bj,
+             };
+            var res =  await dicStu(params);
+            if(res.code==200){
+                this.search.bj = res.data;
+            }else{
+             this.$message(res.message);  
+           }
+         },
+         kxchange(){
+            this.formName.kx = this.aquireLabel(this.search.kx,this.form.kx).name;
+            this.zyList();
+         },
+         zychange(){
+             this.formName.zy = this.aquireLabel(this.search.zy,this.form.zy).name;
+             this.bjList()
+         },
+         bjchange(){
+            //  this.formName.bj = this.aquireLabel(this.search.bj,this.form.bj).name;
+             this.xsList()
+         },
+         xsChange(){
+          //  this.formName.xs = this.aquireLabel(this.search.xs,this.form.xs).name;
+         },
+         xname(){
+          //  this.formName.xq = this.aquireLabel2(this.search.xq,this.form.xq).term;
+           console.log(this.aquireLabel2(this.search.xq,this.form.xq))
+         },
+         // 选择学期
+         async xqList(){
+            var params = {};
+            var res =  await termList(params);
+            console.log(res);
+            if(res.code==200){
+                this.search.xq = res.data;
+
+            }else{
+             this.$message(res.message);  
+            }
+        },
     },
     mounted(){
-      this.echartXr()
+      this.echartXr();
+      this.kxList();
+      this.xqList();
+    
 
     }
 }
@@ -183,6 +358,7 @@ export default {
             position:relative;
             .delete-db{
               position:absolute;
+              cursor:pointer;
               right:20px;
               top:-10px;
               color:#C0C0C0;

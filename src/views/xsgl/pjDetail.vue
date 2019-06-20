@@ -17,7 +17,7 @@
                         :key="item.id"
                         :label="item.term"
                         :value="item.id">
-                    </el-option>
+                        </el-option>
                     </el-select>
                 </el-form-item>    
                  <el-form-item>
@@ -246,7 +246,8 @@ export default {
            twoId:'',
            threeId:'',
            fourId:'',
-       }
+       },
+       dbData:[],
       }  
     },
     methods:{
@@ -299,7 +300,7 @@ export default {
           }
           console.log(this.fourList)
       },
-   
+       
       // 表格list
         async list(){
              var params = {
@@ -342,7 +343,6 @@ export default {
             var res =  await addScore(params);
             console.log(res);
             if(res.code==200){
-                 this.dialogVisible = false;
                 // this.xq = res.data;
                 // // this.form.xq = res.data[0].id;
                 // this.list();

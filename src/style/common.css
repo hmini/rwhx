@@ -55,6 +55,7 @@ em{
     background-color:#337AB7;
     color:#fff;
 }
+
 .header-left .el-dialog__header{
     text-align:left;
     border-bottom:1px solid #ededed;
@@ -122,12 +123,15 @@ em{
     background-color:#fff;  
 }
 .el-table .warning-row {
-    background: oldlace;
+    background: #ECF0F1;
   }
 
-  .el-table .success-row {
-    background: #f0f9eb;
+  .el-table .className:nth-child(2n+1){
+    background: #ECF0F1;
   }
+  /* .el-table .success-row {
+    background: #f0f9eb;
+  } */
 .el-upload--picture-card{
     width:100%;
 }
@@ -152,4 +156,33 @@ em{
 }
 .set{
     cursor: pointer;
+}
+.page-login .el-input__inner{
+    background-color: rgb(232, 240, 254) !important;
+    border: 1px solid #e0e0e0;
+    padding: 10px 11px;
+    width: 280px;
+
+}
+.yhdl-elform .el-input__inner{
+    background-color:transparent;
+    border:none;
+}
+.zhdlTime .el-input__inner{
+    width:280px;
+    background-color: transparent;
+}
+.zhdlTime .el-range-input{
+    background-color: transparent;
+}
+.jsWidth .el-input__inner{
+    width:120px;
+}
+.fenye{
+    width:100%;
+    padding-top:20px;
+    
+}
+.el-pagination{
+    float:right;
 }
