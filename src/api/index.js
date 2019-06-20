@@ -72,6 +72,19 @@ export const gradeList = (params, method) => {
 export const teamList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/teamList`, params, method);
 };
+// 修改班级
+export const editTeam = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/editTeam`, params, method);
+};
+// 添加班级
+export const addTeam = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/addTeam`, params, method);
+};
+// 删除班级
+export const delTeam = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/delTeam`, params, method);
+};
+
 
 
 

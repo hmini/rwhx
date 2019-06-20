@@ -244,7 +244,6 @@ export default {
          async xjList(){
             var params = {};
             var res =  await dicGrade(params);
-            // console.log(res);
             if(res.code==200){
                 this.searchList.xj = res.data;
             }else{

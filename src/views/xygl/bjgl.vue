@@ -4,97 +4,57 @@
               <el-main>
                   <div class="selectButton over" >
                       <div class="left kx-title" >科系:</div> 
-                      <div class="left" id="clickEvent" >
-                            <el-button  v-bind:class="{active:showBack == 'qb'}" @click="kxClick('','qb')">全部</el-button>
-                            <el-button v-for="(item,index) in searchList.kx" :key="index" :bh="item.code" v-model="item.code" v-bind:class="{active:showBack == index}" @click="kxClick(item.code,index)">{{item.name}}</el-button>
+                      <div class="left" >
+                            <el-button  v-bind:class="{active:showBack == '全部'}" @click="kxClick('','全部')">全部</el-button>
+                            <el-button v-for="(item,index) in searchList.kx" :key="index" :bh="item.code"  v-bind:class="{active:showBack == item.name}" @click="kxClick(item.code,item.name)">{{item.name}}</el-button>
                       </div>
                   </div>
                   <div class="selectButton over" >
                       <div class="left kx-title" >学级:</div> 
                       <div class="left clickEvent">
-                            <el-button  v-bind:class="{active:showBack2 == 'qb'}" @click="njClick('','qb')">全部</el-button>
-                            <el-button v-for="(item,index) in searchList.xj" :key="index" :bh="item.code" v-model="item.code" v-bind:class="{active:showBack2 == index}" @click="njClick(item.code,index)">{{item.name}}</el-button>
+                            <el-button  v-bind:class="{active:showBack2 == '全部'}" @click="njClick('','全部')">全部</el-button>
+                            <el-button v-for="(item,index) in searchList.xj" :key="index" :bh="item.code"  v-bind:class="{active:showBack2 == item.name}" @click="njClick(item.code,item.name)">{{item.name}}</el-button>
                       </div>
                   </div>
                     <div>
                         <div class="over width100 zynr">
                             <div class="xi-contain">
-                                <div>
-                                    <div class="main-title border-bottom">高职</div>
-                                    <div>
-                                        <div class="main-title">会计3+2</div>
+                                <div v-for="(item,index) in list" :key="index">
+                                    <div class="main-title border-bottom">{{item.mainMenu.department}}</div>
+                                    <div v-for="(son,index2) in item.sonMenu" :key="index2">
+                                        <div class="main-title">{{son.mainMenu.specialty}}</div>
                                         <ul class="bzuren">
-                                            <li>
+                                            <li v-for="(sun,index3) in son.sonMenu" :key="index3">
                                                 <table>
                                                     <tbody>
                                                         <tr>
-                                                            <td class="width200">111</td>
-                                                            <td>111</td>
-                                                            <td class="width200">
-                                                                <el-button class="buttonback">增加</el-button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </li>
-                                            <li>
-                                                <table>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="width200">111</td>
-                                                            <td>111</td>
-                                                            <td class="width200">
-                                                                <el-button class="buttonback">增加</el-button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="main-title border-bottom">高职</div>
-                                    <div>
-                                        <div class="main-title">会计3+2</div>
-                                        <ul class="bzuren">
-                                            <li>
-                                                <table>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="width200">111</td>
+                                                            <td class="width200">{{sun.mainMenu.grade}}</td>
                                                             <td>
-                                                                    <div class="selectbox">
-                                                                        <el-input class="nianjixz" v-model="value" ></el-input>
-                                                                        <el-select v-model="value" placeholder="请选择"  class="nianjixz">
-                                                                            <el-option :label="label" :value="value"> 16-17</el-option>
-                                                                            <el-option :label="label" :value="value">1111</el-option>
+                                                                <div class="selectbox left" v-for="(zsun,index4) in sun.sonMenu" :key="index4">
+                                                                    <el-form :inline="true" v-bind:class="{activeborder:dianji !== zsun.team_id}">
+                                                                        <el-input v-model="zsun.name" class="nianjixz left" :disabled="dianji !== zsun.team_id"></el-input>
+                                                                            <el-select v-model="zsun.teacher_id"  class="nianjixz left mingcheng" :disabled="dianji !== zsun.team_id">
+                                                                                <el-option  v-for="item in searchList.laoshi"
+                                                                                :key="item.code"
+                                                                                :label="item.name"
+                                                                                :value="item.code">
+                                                                            </el-option>
                                                                         </el-select>
-                                                                        <div class="set">
-                                                                            <i class="iconfont icon-set1"></i>
-                                                                            <i class="iconfont icon-shanchu"></i>
-                                                                        </div>
-                                                                        <div>
-                                                                            <i></i>
-                                                                            <i></i>
-                                                                        </div>
+                                                                        <div class="clear"></div>
+                                                                    </el-form>
+                                                                    <div class="set" v-show="dianji !== zsun.team_id">
+                                                                        <i class="iconfont icon-set1" @click.stop="setBj(zsun.grade_id,zsun.specialty_id,zsun.teacher_id,zsun.department_id,zsun.team_id,zsun.name)"></i>
+                                                                        <i class="iconfont icon-shanchu" @click="deleteset(zsun.team_id)"></i>
                                                                     </div>
+                                                                    <div class="set"  v-show="dianji == zsun.team_id">
+                                                                        <i class="iconfont" @click.stop="setBjCg(zsun.grade_id,zsun.specialty_id,zsun.teacher_id,zsun.department_id,zsun.team_id,zsun.name)">√</i>
+                                                                        <i class="iconfont" @click="dianji=''">〈</i>
+                                                                    </div>
+                                                                    
+                                                                </div>
                                                             </td>
                                                             <td class="width200">
-                                                                <el-button class="buttonback"><i class="iconfont icon-jiashang"></i>增加</el-button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </li>
-                                            <li>
-                                                <table>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td class="width200">111</td>
-                                                            <td>111</td>
-                                                            <td class="width200">
-                                                                <el-button class="buttonback"><i class="iconfont icon-jiashang"></i>增加</el-button>
+                                                                <el-button class="buttonback" @click="addFunction(item.mainMenu.id,son.mainMenu.id,sun.mainMenu.id)"><i class="iconfont icon-jiashang" ></i>增加</el-button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -109,30 +69,39 @@
                         </div>
                     </div>
                     <el-dialog
-                        title="学级"
+                        title=""
                         :visible.sync="dialogVisible"
                         width="30%" class="align-left">
-                        <div>   
-                            <el-input></el-input>
-                        </div>
+                        <el-form label-position="top" :model="edit" :rules="rules" ref="addForm" class="selectBottom">
+                            <el-form-item label="班级名" prop="name">
+                                <el-input v-model="addForm.name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="老师" prop="teacher_id">
+                            <el-select v-model="addForm.teacher_id">
+                                    <el-option  v-for="item in searchList.laoshi"
+                                    :key="item.code"
+                                    :label="item.name"
+                                    :value="item.code">
+                                </el-option>
+                            </el-select>
+                            </el-form-item>
+                            
+                        </el-form>
                         <span slot="footer" class="dialog-footer">
-                            <el-button @click="dialogVisible = false">取 消</el-button>
-                            <el-button type="primary" @click="addXj()">确 定</el-button>
+                            <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+                            <el-button type="primary" @click="submitForm('addForm')">保存</el-button>
                         </span>
-                    </el-dialog>
+                 </el-dialog>
                     <el-dialog
                         title="删除"
                         :visible.sync="dialogVisible2"
                         width="30%">
-                        <span>您确定要删除这个年级</span>
+                        <span>您确定删除</span>
                         <span slot="footer" class="dialog-footer">
                             <el-button @click="dialogVisible2 = false">取 消</el-button>
                             <el-button type="primary" @click="deleteEvent()">确 定</el-button>
                         </span>
-                    </el-dialog>
-
-
-                    
+                    </el-dialog>                  
                 </el-main>
         </el-container>
       
@@ -140,72 +109,185 @@
 </template>
 <script>
     import { mapMutations } from 'vuex';
-  import {dicGrade,dicDepartment,teamList} from '@/api';
+  import {dicGrade,dicDepartment,teamList,usersList,dicTeam,editTeam,delTeam,addTeam} from '@/api';
   import { jquery } from '@/script/jquery-1.7.1';
     export default {
         data(){
             return{
                 dialogVisible:false,
                 dialogVisible2:false,
+                dialogVisible3:false,
                 active:'',
                 xh:0,
                 key:0,
                 value:'16-17',
                 label:'',
-                showBack:'qb',
-                showBack2:'qb',
+                showBack:'全部',
+                showBack2:'全部',
                 disabled:true,
                 searchList:{
                     xj:[],
                     kx:'',
                     zy:'',
                     bj:'',
+                    laoshi:'',
                 },
+                specialty_id:'',
                 kxCode:'',
                 njCode:'',
-                  
+                kxName:'',
+                njName:'',
+                borderSty:true,
+                list:'',
+                disabled:true,
+                edit:{
+                    team_id:'',
+                    teacher_id:'',
+                    id:'',
+                    name:'',
+                },
+                dianji:'',
+                addForm:{
+                    department_id:'',
+                    specialty_id:'',
+                    grade_id:'',
+                    name:'',
+                    teacher_id:'',
+                },
+                deleteId:'',
+                 rules:{
+                    //  name:[
+                    //     { required: true, message: '请输入班级名称', trigger: 'blur',type :"string"  }
+                    // ],
+                    // teacher_id:[
+                    //     { required: true, message: '请选择老师', trigger: 'change',type :"string" }
+                    // ],   
+                    },
                 }
             },
       
         methods:{
-            addXj(){
-
+            deleteset(id){
+               this.deleteId =  id;
+                this.dialogVisible2 = true;  
             },
-            deleteEvent(){
-
+            // 班级列表
+            async deleteEvent(){
+                var params = {
+                    id:this.deleteId
+                   
+                };
+                var res =  await delTeam(params);
+                if(res.code==200){
+                    this.dialogVisible2 = false;
+                    this.$message(res.message);  
+                    this.bjList();
+                    
+                }else{
+                this.$message(res.message);  
+                }
             },
-            kxClick(code,index){
-                this.showBack = index;
+              
+            kxClick(code,name){
+                this.showBack = name;
                 this.kxCode = code;
+                this.kxName = name;
                 this.bjList();
             },
-            njClick(code,index){
-                this.showBack2 = index;
+            njClick(code,name){
+                this.showBack2 = name;
                 this.njCode = code;
+                this.njName = name
                 this.bjList();
             },
             qbClick(){
                 this.showBack = 'qb';
             },
-            clickEvent(){
-                $('#clickEvent>button').click(function(){
-                    var index = $('#clickEvent>button').index(this);
-                    $(this).addClass('active').siblings().removeClass('active')
-                })
-            },
             inputFocus(){
                 $(this).addClass('addborder');
             },
-            // 选择科系
+            // 设置
+            setBj(grade_id,specialty_id,teacher_id,department_id,team_id,name){
+                this.edit.team_id = team_id;
+                this.specialty_id = specialty_id;
+                this.dianji = team_id;
+                this.bjoption();
+
+            },
+            setBjCg(grade_id,specialty_id,teacher_id,department_id,team_id,name){
+                 this.edit.name = name;
+                 this.edit.teacher_id = teacher_id;
+                 this.editList();
+            },
+            // 班级列表
             async bjList(){
                 var params = {
                     specialty_parent_id:this.kxCode,
                     grade_id:this.njCode,
+                    department:this.kxName,
+                    grade_name:this.njName       
                 };
                 var res =  await teamList(params);
-                // console.log(res)
+                console.log(res)
                 if(res.code==200){
-                    console.log(res)
+                    this.list = res.data;
+                    
+                }else{
+                this.$message(res.message);  
+                }
+            },
+            // 修改
+            async editList(){
+                var params = {
+                    id:this.edit.team_id,
+                    name:this.edit.name,
+                    teacher_id:this.edit.teacher_id,
+                    
+                };
+                var res =  await editTeam(params);
+                console.log(res)
+                if(res.code==200){
+                    this.dianji='';
+                    this.$message(res.message); 
+                }else{
+                this.$message(res.message);  
+                }
+            },
+            addFunction(department_id,specialty_id,grade_id){
+                this.addForm.department_id = department_id;
+                this.addForm.specialty_id = specialty_id;
+                this.addForm.grade_id = grade_id;
+                this.dialogVisible = true;
+
+            },
+            submitForm(formName){
+                    this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        console.log(this.addForm.name);
+                         console.log(this.addForm.teacher_id);
+                        this.addList()
+                    } else {
+                        console.log(this.addForm.name);
+                        console.log(this.addForm.teacher_id);
+                        return false;
+                    }
+                });
+            },
+            // 增加
+            async addList(){
+                var params = {
+                    department_id:this.addForm.department_id,
+                    specialty_id:this.addForm.specialty_id,
+                    grade_id:this.addForm.grade_id,
+                    name:this.addForm.name,
+                    teacher_id:this.addForm.teacher_id
+                };
+                var res =  await addTeam(params);
+                console.log(res)
+                if(res.code==200){
+                    this.dialogVisible = false;
+                    this.$message(res.message); 
+                    this.bjList();
                 }else{
                 this.$message(res.message);  
                 }
@@ -218,8 +300,8 @@
                 if(res.code==200){
                     this.searchList.xj = res.data;
                 }else{
-                this.$message(res.message);  
-            }
+                     this.$message(res.message);  
+                }
             },
             // 选择科系
             async kxList(){
@@ -232,11 +314,37 @@
                 this.$message(res.message);  
                 }
             },
+            // 选择老师
+            async lsList(){
+                var params = {};
+                var res =  await usersList(params);
+                console.log(res)
+                if(res.code==200){
+                    this.searchList.laoshi = res.data;
+                }else{
+                this.$message(res.message);  
+                }
+            },
+             // 选择班级
+            async bjoption(id){
+                var params = {
+                    grade_id:this.njCode,
+                    specialty_id:this.specialty_id
+                };
+                var res =  await dicTeam(params);
+                console.log(res)
+                if(res.code==200){
+                     this.searchList.bj = res.data;
+                }else{
+                    this.$message(res.message);  
+                }
+            },
         },
         mounted(){
-            this.clickEvent();
             this.kxList();
             this.xjList();
+            this.lsList();
+            // this.bjoption();
             this.bjList();
         }
     }
@@ -286,7 +394,7 @@
                             >li{
                                 width:100%;
                                 background-color:#F5F5F5;
-                                padding:20px;
+                                padding:10px 20px;
                                 margin-bottom:10px;
                                 table{
                                     width:100%;
@@ -294,9 +402,26 @@
                                         width:200px;
                                     }
                                     .selectbox{
-                                        width:300px;
+                                        width:250px;
+                                        margin-left:10px;
                                         border:1px solid #999;
+                                        height:100%;
                                         position:relative;
+                                        .el-form{
+                                            width:calc(100% - 50px);
+                                            height:70px;
+                                        }
+                                        .el-input{
+                                            width:40%;
+                                            height:40px;
+                                        }
+                                        .el-select{
+                                            width:calc(60%);
+                                            height:40px;
+                                            i{
+                                                display:none;
+                                            }
+                                        }
                                         .set{
                                             position:absolute;
                                             right:5px;

@@ -116,10 +116,7 @@ em{
     background-size: 100% 100%;
     border:none;
 }
-.nianjixz .el-input__inner{
-    border:none;
-    background-color:transparent;
-}
+
 .addborder .el-input__inner{
     border:1px solid #999;
     background-color:#fff;  
@@ -143,4 +140,16 @@ em{
 .padding-5{
     display:inline-block;
     padding:5px 5px 0 0 ;
+}
+.activeborder .el-input__inner{
+    border:none;
+}
+.activeborder .el-select .el-input .el-select__caret{
+    display: none;
+}
+.el-input.is-disabled .el-input__inner{
+    color:#333;
+}
+.set{
+    cursor: pointer;
 }
