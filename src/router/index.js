@@ -23,6 +23,7 @@ const PjDetail = r => require.ensure([], () => r(require('@/views/xsgl/pjDetail'
 Vue.use(Router)
 
 export default new Router({
+  base:'/evaluate',
   routes: [
     // { path: '*', component: page404 },
     {
