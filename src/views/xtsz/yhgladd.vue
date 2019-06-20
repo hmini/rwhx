@@ -15,34 +15,33 @@
                         <div class="left linethree"></div>
                     </div>
                     <div class="over width100 zynr align-left">
-                    <el-form :inline="true" :model="form" class="demo-form-inline" label-position="top">
-                        <el-form-item label="账号">
-                            <el-input v-model="form.zh" placeholder=""></el-input>
+                    <el-form :inline="true" :model="form" class="demo-form-inline" label-position="top" ref="form" :rules="rules">
+                        <el-form-item label="账号" prop="login">
+                            <el-input v-model="form.login" placeholder=""></el-input>
                         </el-form-item>
-                        <el-form-item label="姓名">
-                            <el-input v-model="form.zh" placeholder=""></el-input>
+                        <el-form-item label="姓名"  prop="first_name">
+                            <el-input v-model="form.first_name" placeholder=""></el-input>
                         </el-form-item>
-                        <el-form-item label="密码">
-                            <el-input v-model="form.zh" placeholder=""></el-input>
+                        <el-form-item label="密码" prop="password">
+                            <el-input v-model="form.password" placeholder="" type="password"></el-input>
                         </el-form-item>
-                        <el-form-item label="确认密码">
-                            <el-input v-model="form.zh" placeholder=""></el-input>
+                        <el-form-item label="确认密码" prop="checkPass">
+                            <el-input v-model="form.checkPass" placeholder="" type="password"></el-input>
                         </el-form-item>
-                        <el-form-item label="">
+                        <el-form-item label="" prop="role_id">
                             <p>角色</p>
                             <span class="fu-title">为当前管理员创建角色</span>
-                            <el-radio-group v-model="form.js">
-                                <el-radio label="管理员" value="1"></el-radio><br/>
-                                <el-radio label="管理员" value="1"></el-radio><br/>
-                                <el-radio label="管理员" value="1"></el-radio><br/>
-                                <el-radio label="管理员" value="1"></el-radio><br/>
-                                <el-radio label="管理员" value="2"></el-radio>
+                            <el-radio-group v-model="form.role_id">
+                                <p v-for="item in jsList" :key="item.code">
+                                    <el-radio :label="item.name"  :value="item.code"></el-radio>
+                                </p>
+                                
                             </el-radio-group>
                         </el-form-item>
-                          <el-form-item style="width:100%">
-                                <el-button type="primary" @click="onSubmit">立即创建</el-button>
+                        <el-form-item style="width:100%">
+                                <el-button type="primary" @click="onSubmit('form')">立即创建</el-button>
                                 <el-button>取消</el-button>
-                            </el-form-item>
+                        </el-form-item>
                         
                     </el-form>
                         
@@ -51,57 +50,91 @@
                 <div class="left upload">
                     <p class="align-left">上传头像</p>
                         <el-upload
-                            action="https://jsonplaceholder.typicode.com/posts/"
+                            action="aaa"
+                            ::limit="1"
                             list-type="picture-card"
                             :on-preview="handlePictureCardPreview"
-                            :on-remove="handleRemove">
+                            :on-remove="handleRemove"
+                            :before-upload="beforeupload">
                             <i class="iconfont icon-shangchuan"></i>
                             </el-upload>
                             <el-dialog :visible.sync="dialogVisible" size="tiny">
                             <img width="100%" :src="dialogImageUrl" alt="">
-                    </el-dialog>
+                        </el-dialog>
                 </div>
-                <el-dialog
-                    title="学级"
-                    :visible.sync="dialogVisible"
-                    width="30%" class="align-left">
-                    <div>   
-                        <el-input></el-input>
-                    </div>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogVisible = false">取 消</el-button>
-                        <el-button type="primary" @click="addXj()">确 定</el-button>
-                    </span>
-                </el-dialog>
-                <el-dialog
-                    title="删除"
-                    :visible.sync="dialogVisible2"
-                    width="30%">
-                    <span>您确定要删除这个年级</span>
-                    <span slot="footer" class="dialog-footer">
-                        <el-button @click="dialogVisible2 = false">取 消</el-button>
-                        <el-button type="primary" @click="deleteEvent()">确 定</el-button>
-                    </span>
-                </el-dialog>
-
-
-                
+              
             </el-main>
         </el-container>
        
     </div>
 </template>
 <script>
+    import { mapMutations } from 'vuex';
+    import {addUsers,dicRole} from '@/api';
+    import { jquery } from '@/script/jquery-1.7.1';
     export default {
         data(){
+             var validatePass = (rule, value, callback) => {
+                        if (value === '') {
+                        callback(new Error('请输入密码'));
+                        } else {
+                        if (this.form.checkPass !== '') {
+                            this.$refs.form.validateField('checkPass');
+                        }
+                        callback();
+                        }
+                    };
+                    var validatePass2 = (rule, value, callback) => {
+                        if (value === '') {
+                        callback(new Error('请再次输入密码'));
+                        } else if (value !== this.form.password) {
+                        callback(new Error('两次输入密码不一致!'));
+                        } else {
+                        callback();
+                        }
+                    };
             return{
+               
                 dialogVisible:false,
                 dialogVisible2:false,
                 dialogImageUrl: '',
                 dialogVisible: false,
+                dialogImageUrl:'',
                 form:{
-                    zh:'',
-                    js:'',                }
+                    fileName:'',
+                    first_name:'', 
+                    password:'',
+                    role_id:'',    
+                    login:'',
+                    checkPass:'',
+
+                },
+                rules:{
+                    login:[
+                       { required: true, message: '请输入账号名称', trigger: 'blur' }
+                    ],
+                    first_name:[
+                        { required: true, message: '请输入姓名', trigger: 'blur' },
+                    ],
+                    role_id:[
+                         { required: true, message:'请选择角色类型', trigger: 'change' },  
+                    ],
+                    password:[
+                        {
+                           validator:validatePass, trigger: 'blur' 
+                        }
+                        
+                    ],
+                    fileName:[
+                        { required: true, message: '请上传图片' }
+                    ],
+                  
+                    checkPass:[
+                        { validator: validatePass2, trigger: 'blur' }
+                    ]
+
+                },
+                jsList:''
             }
         },
         methods:{
@@ -112,16 +145,58 @@
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
             },
+            beforeupload (file) {
+                this.form.fileName = file;
+                return false
+
+            },
             addXj(){
 
             },
             deleteEvent(){
 
             },
-            onSubmit(){
-
+            onSubmit(formName){
+                 this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.addyh();
+                    alert('submit!');
+                } else {
+                    console.log('error submit!!');
+                    return false;
+                }
+        });
+            },
+            async addyh(){
+                var params = {
+                    first_name:this.form.first_name,
+                    login:this.form.login,
+                    password:this.form.password,
+                    role_id:this.form.role_id,
+                    fileName:this.form.fileName,
+                };
+                var res = await addUsers(params);
+                if(res.code == 200){
+                    console.log(res)
+                    this.jsList= res.data;
+                }else{
+                    this.$message(res.message);
+                }
+            },
+             async role(){
+                var params = {};
+                var res = await dicRole(params);
+                if(res.code == 200){
+                    console.log(res)
+                    this.jsList= res.data;
+                }else{
+                    this.$message(res.message);
+                }
             },
              
+        },
+        mounted(){
+            this.role()
         }
     }
 </script>

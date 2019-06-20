@@ -8,8 +8,8 @@
              <el-main>
                     <div>
                         <div class="width100 align-left padding-left-20" >
-                            <el-button type="primary" @click="dialogVisible = true"><i class="iconfont icon-jiashang"></i>返回管理员列表</el-button>
-                            <el-button  @click="dialogVisible = true"><i class="iconfont icon-shanchu"></i>新建角色</el-button>
+                            <!-- <el-button type="primary" @click="dialogVisible = true"><i class="iconfont icon-jiashang"></i>返回管理员列表</el-button> -->
+                            <!-- <el-button  @click="dialogVisible = true"><i class="iconfont icon-shanchu"></i>新建角色</el-button> -->
                         </div>
                         <div class="over width100 zynr">
                             <el-table  ref="multipleTable"
@@ -17,35 +17,25 @@
                                     style="width: 100%"
                                     @selection-change="handleSelectionChange"
                                     :row-class-name="tableRowClassName"
-                                     :default-sort = "{prop: 'lastLogin', order: 'descending'}">
-                                <el-table-column
-                                type="selection"
-                                    width="55" 
-                                    sortable
-                                    align="center">
-                                </el-table-column>
+                                    :default-sort = "{prop: 'lastLogin', order: 'descending'}">
                                 <el-table-column
                                     label="姓名"
                                     prop="name" 
                                     sortable
-                                    align="center">
+                                    align="center"
+                                    width="200">
                                 </el-table-column>
                                  <el-table-column
-                                    label="登录"
+                                    label="角色功能描述"
                                      sortable
                                      sort-by="{prop: 'login', order: 'descending'}"
-                                    prop="login" align="center">
+                                    prop="description" align="center">
                                 </el-table-column>
                                  <el-table-column
-                                    label="角色"
-                                    prop="js" 
-                                    sort-by="{prop: 'login', order: 'descending'}"
-                                    align="center">
-                                </el-table-column>
-                                <el-table-column
-                                    label="最后登录"
-                                    sortable
-                                    prop="lastLogin" align="center">
+                                    label="用户数"
+                                    prop="id" 
+                                    align="center"
+                                    width="200">
                                 </el-table-column>
                             </el-table>
                         </div>
@@ -81,6 +71,9 @@
     </div>
 </template>
 <script>
+import { mapMutations } from 'vuex';
+import {roleList,existUser,addUsers,dicRole} from '@/api';
+import { jquery } from '@/script/jquery-1.7.1';
     export default {
         data(){
             return{
@@ -121,6 +114,18 @@
             deleteEvent(){
 
             },
+            async list(){
+                // this.form.date[1] =this.makeTime
+                var params = {};
+                console.log(params)
+                var res = await roleList(params);
+                if(res.code == 200){
+                    console.log(res)
+                    this.tableData = res.data;
+                }else{
+                    this.$message(res.message);
+                }
+            },
             handleSelectionChange(){
 
             },
@@ -132,6 +137,9 @@
                 }
                 return '';
             }
+        },
+        mounted(){
+            this.list()
         }
     }
 </script>

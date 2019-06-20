@@ -73,6 +73,37 @@ export const gradeList = (params, method) => {
 export const teamList = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/teamList`, params, method);
 };
+// 修改班级
+export const editTeam = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/editTeam`, params, method);
+};
+// 添加班级
+export const addTeam = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/addTeam`, params, method);
+};
+// 删除班级
+export const delTeam = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/college/delTeam`, params, method);
+};
+
+
+// 用户设置
+// 用户管理List
+export const userList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/system/usersList`, params, method);
+};
+// 用户名是否被占用
+export const existUser = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/system/existUser`, params, method);
+};
+// 新增用户
+export const addUsers = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/system/addUsers`, params, method);
+};
+// 角色列表
+export const roleList = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/system/roleList`, params, method);
+};
 
 
 
@@ -124,6 +155,15 @@ export const delQuota = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/quota/delQuota`, params, method);
 };
 
+// 根据专业选择班级
+export const dicTeamZy = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/dic/dicTeamZy`, params, method);
+};
+// 根据班级选择学生
+export const dicStu = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/dic/dicStu`, params, method);
+};
+
 //学院管理
 //学级管理
 export const collegeGradeList = (params, method) => {
@@ -160,4 +200,10 @@ export const addTerm = (params, method) => {
 // 学院下的学期列表删除
 export const delTerm = (params, method) => {
   return formMiddlePromise(`${hotelBaseUrl}/college/delTerm`, params, method);
+};
+
+
+// 首页
+export const makeTb = (params, method) => {
+  return formMiddlePromise(`${hotelBaseUrl}/home/makeTb`, params, method);
 };

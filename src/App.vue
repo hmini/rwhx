@@ -30,7 +30,7 @@ h1,h2,h3,h4,h5,h6,p,div,ul,li{
 }
 .page{
   width:100%;
-  height:100%;
+  height:100vh;
   font-size:14px;
   font-family: 'Source Sans Pro','Helvetica Neue',Helvetica,Arial,sans-serif;
 }

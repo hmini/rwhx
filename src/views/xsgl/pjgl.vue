@@ -198,12 +198,7 @@ export default {
             this.bjList();
         },
         tableRowClassName({row, rowIndex}) {
-            if (rowIndex === 1) {
-                return 'warning-row';
-            } else if (rowIndex === 3) {
-                return 'success-row';
-            }
-                return '';
+             return 'className';
         },
         handleClick(row){
              this.$router.push({path: '/PjDetail',query:{id:row.id}});
@@ -244,7 +239,6 @@ export default {
          async xjList(){
             var params = {};
             var res =  await dicGrade(params);
-            // console.log(res);
             if(res.code==200){
                 this.searchList.xj = res.data;
             }else{
