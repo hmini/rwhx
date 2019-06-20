@@ -58,7 +58,7 @@
           <div class="over">
               <div class="left dbxq">
                   <ul class="dbnr">
-                    <li v-for="(item,index) in dataidpush" :key="index" v-show="dbData.length!==0">
+                    <li v-for="(item,index) in dataPush" :key="index" v-show="dataPush.length!==0">
                        <span v-show="item.kx !== ''">{{item.kx}}</span>
                        <span v-show="item.kx !== ''&& item.zy !== ''">>>></span>
                        <span  v-show="item.zy !== ''">{{item.zy}}</span>
@@ -104,6 +104,8 @@ export default {
          kx:'',
          zy:'',
          xq:'',
+         bj:'',
+         xs:'',
 
        },
        formName:{
@@ -171,6 +173,7 @@ export default {
       },
       deleteDb(index){
          this.dataidpush =delete this.dataidpush[index];
+         this.dataPush =delete this.dataPush[index];
       },
       echartXr(){
         this.chart = this.$echarts.init(document.getElementById('leida'));
@@ -178,46 +181,10 @@ export default {
       },
        zjdb(){
          this.dataidpush.push(this.form);
-         this.dataPush.push(this.formName);
-            // this.dataPush.kx = this.formName.kx;
-            // this.dataPush.zy = this.formName.zy;
-            // this.dataPush.bj = this.formName.bj;
-            // this.dataPush.xs = this.formName.xs;
-            // this.dataPush.xq = this.formName.xq;
-            console.log(this.dataPush);
-            // console.log(this.formName.kx);
-            // console.log(this.formName.xq);
-            // console.log(this.formName.bj);
-            // console.log(this.formName.xs);
-            // console.log(this.formName.xq);
-
-            // if(this.form.kx !='' 
-            // || this.form.zy !=''
-            // || this.form.bj !=''
-            // || this.form.xs !=''
-            // || this.form.xq !=''){
-            //   this.dbData.push(dataPush)
-            // }
-            this.dbData.push(this.dataPush)
-
-            
-        },
-     
-        aquireLabel2(arr,id){
-            var obj = {};
-              obj = arr.find(function(item){
-                return item.id === id 
-              });
-              return obj
+         this.dataPush.push(this.formName);   
+         console.log( this.dataPush)
         },  
-         aquireLabel(arr,id){
-            var obj = {};
-              obj = arr.find(function(item){
-                return item.code === id
-              });
-              
-              return obj
-        }, 
+        
              // 首页图标
         async tb(id){
             var params = {
@@ -244,18 +211,15 @@ export default {
            }
          },
          // 选择专业
-         async zyList(name){
-           
-            console.log(this.formName.kx)
+         async zyList(){
             var params = {id:this.form.kx};
-            this.formName.kx = name;
             var res =  await dicSpecialty(params);
             if(res.code==200){
                 this.search.zy = res.data;
             }
          },
           // 选择班级
-         async bjList(name){
+         async bjList(){
          
             var params = {
                 specialty_id:this.form.zy
@@ -269,8 +233,7 @@ export default {
            }
          },
           // 选择学生
-         async xsList(name){
-        
+         async xsList(){
            var params = {
                 team_id:this.form.bj,
              };
@@ -281,25 +244,41 @@ export default {
              this.$message(res.message);  
            }
          },
+          aquireLabel(arr,id,code,name){
+           for(var i=0;i<arr.length;i++){
+             if(id == arr[i].code){
+               return arr[i].name
+             }
+           }
+        }, 
+        aquireLabel2(arr,id2,id,term){
+           for(var i=0;i<arr.length;i++){
+             if(id2 == arr[i].id){
+               return arr[i].term
+             }
+           }
+        }, 
          kxchange(){
-            this.formName.kx = this.aquireLabel(this.search.kx,this.form.kx).name;
-            console.log(this.formName.kx)
+            this.formName.kx = this.aquireLabel(this.search.kx,this.form.kx,'code','name');
             this.zyList();
          },
          zychange(){
-             this.formName.zy = this.aquireLabel(this.search.zy,this.form.zy).name;
+              this.formName.zy = this.aquireLabel(this.search.zy,this.form.zy,'code','name');
+               console.log( this.formName.zy);
              this.bjList()
          },
          bjchange(){
-            //  this.formName.bj = this.aquireLabel(this.search.bj,this.form.bj).name;
+            this.formName.bj = this.aquireLabel(this.search.bj,this.form.bj,'code','name');
+            console.log( this.formName.bj);
              this.xsList()
          },
          xsChange(){
-          //  this.formName.xs = this.aquireLabel(this.search.xs,this.form.xs).name;
+            this.formName.xs = this.aquireLabel(this.search.xs,this.form.xs,'code','name');
+             console.log( this.formName.xs);
          },
          xname(){
-          //  this.formName.xq = this.aquireLabel2(this.search.xq,this.form.xq).term;
-           console.log(this.aquireLabel2(this.search.xq,this.form.xq))
+            this.formName.xq = this.aquireLabel2(this.search.xq,this.form.xq,'id','term');
+            console.log(this.formName.xq);
          },
          // 选择学期
          async xqList(){
