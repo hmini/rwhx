@@ -5,8 +5,8 @@ import Qs from 'qs';
 
 let base = '';
 // TODO
-let hotelBaseUrl = 'http://localhost:8080/'; //测试
-// let hotelBaseUrl = 'http://localhost:8080/evaluate/'; //发布
+// let hotelBaseUrl = 'http://localhost:8080'; //测试
+let hotelBaseUrl = 'http://114.116.15.130:8080/evaluate'; //发布
 // process.env.NODE_ENV == 'development'
 //     (base = 'localhost:8080'); //域名测试地址
 
