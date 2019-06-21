@@ -123,7 +123,7 @@ export default {
             },
             tooltip: {},
             legend: {
-                data: ['预警值', '学院平均值']
+                data: [ '学院平均值']
             },
             radar: {
                 // shape: 'circle',
@@ -136,10 +136,10 @@ export default {
                   }
                 },
                 indicator: [
-                  { name: '发展潜力素质', max: 6500},
-                  { name: '思想道德素质', max: 16000},
-                  { name: '科学文化与职业技能素质', max: 30000},
-                  { name: '身体心理素质', max: 38000},
+                  { name: '发展潜力素质', max: 100},
+                  { name: '思想道德素质', max: 100},
+                  { name: '科学文化与职业技能素质', max: 100},
+                  { name: '身体心理素质', max: 100},
                 ]
             },
             series: [{
@@ -197,33 +197,34 @@ export default {
                   var dataArr=[];
                   var datavalue = [];
                   var dataid = [];
-                  if(this.dataPush[i].kx!==''){
-                    name = this.dataPush[i].kx;
-                  };
-                  if(this.dataPush[i].kx!=='' &&this.dataPush[i].zy!==''){
-                    name =name+'-'
-                  };
-                  if(this.dataPush[i].zy!==''){
-                    name = name+this.dataPush[i].zy;
-                  };
-                  if(this.dataPush[i].zy!=='' &&this.dataPush[i].bj!==''){
-                    name =name+'-'+this.dataPush[i].bj
-                  };
-                  if(this.dataPush[i].bj!==''){
-                    name = name+this.dataPush[i].bj;
-                  };
-                  if(this.dataPush[i].bj!=='' &&this.dataPush[i].xs!==''){
-                    name =name+'-'
-                  };
-                  if(this.dataPush[i].xs!==''){
-                    name = name+this.dataPush[i].xs;
-                  };
-                  if(this.dataPush[i].xs!=='' &&this.dataPush[i].xq!==''){
-                    name =name+'-'
-                  }
-                  if(this.dataPush[i].xq!==''){
-                    name = name+this.dataPush[i].xq;
-                  };
+                  var injiao = []
+                  // if(this.dataPush[i].kx!==''){
+                  //   name = this.dataPush[i].kx;
+                  // };
+                  // if(this.dataPush[i].kx!=='' &&this.dataPush[i].zy!==''){
+                  //   name =name+'-'
+                  // };
+                  // if(this.dataPush[i].zy!==''){
+                  //   name = name+this.dataPush[i].zy;
+                  // };
+                  // if(this.dataPush[i].zy!=='' &&this.dataPush[i].bj!==''){
+                  //   name =name+'-'+this.dataPush[i].bj
+                  // };
+                  // if(this.dataPush[i].bj!==''){
+                  //   name = name+this.dataPush[i].bj;
+                  // };
+                  // if(this.dataPush[i].bj!=='' &&this.dataPush[i].xs!==''){
+                  //   name =name+'-'
+                  // };
+                  // if(this.dataPush[i].xs!==''){
+                  //   name = name+this.dataPush[i].xs;
+                  // };
+                  // if(this.dataPush[i].xs!=='' &&this.dataPush[i].xq!==''){
+                  //   name =name+'-'
+                  // }
+                  // if(this.dataPush[i].xq!==''){
+                  //   name = name+this.dataPush[i].xq;
+                  // };
                   lenged.push(name)
                   dataoption.push({
                     name:name,
@@ -233,6 +234,7 @@ export default {
                   });
                     console.log(dataer)
                   for(var j = 0;j<dataer.length;j++){
+                      // injiao.push(dataer[j].name)
                       if(dataer[j].sum == undefined){
                         datavalue.push(0);
                       }else{
@@ -247,16 +249,13 @@ export default {
                   dataArr.push(
                     {
                       value:datavalue,
-                      name:'预警值'
-                    },
-                    {
-                      value:dataid,
-                      name:'学院平均值'
+                      name:'预警值',
+                      id:dataid
                     },
                   );
                 };
-                lenged.push('预警值', '学院平均值');
-                this.option.legend = lenged
+                // lenged.push('学院平均值');
+                // this.option.legend = lenged
                 this.option.series = dataoption;
                   this.chart = this.$echarts.init(document.getElementById('leida'));
                   this.chart.setOption(this.option);
