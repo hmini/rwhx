@@ -79,6 +79,18 @@
           <div class="tuxing">
               <div class="left leida" id="leida"></div>
               <div class="table left">
+                  <table>
+                    <thead>
+                        <tr>
+                          <td>1</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                          <td>1</td>
+                        </tr>
+                    </tbody>
+                  </table>
               </div>
           </div>
         </el-main>
@@ -135,12 +147,7 @@ export default {
                         padding: [3, 5]
                   }
                 },
-                indicator: [
-                  { name: '发展潜力素质', max: 100},
-                  { name: '思想道德素质', max: 100},
-                  { name: '科学文化与职业技能素质', max: 100},
-                  { name: '身体心理素质', max: 100},
-                ]
+                indicator: []
             },
             series: [{
                 name: '',
@@ -176,7 +183,8 @@ export default {
       },
        zjdb(){
          this.dataidpush.push(this.form);
-         this.dataPush.push(this.formName);   
+         var data = this.formName;
+         this.dataPush.push(data);   
          console.log( this.dataPush)
         },      
         // 首页图标
@@ -186,55 +194,56 @@ export default {
               id:id
             }
             var res =  await makeTb(params);
-            // console.log(res)
             if(res.code==200){
                var data = res.data;
                var name="";
                var dataoption = [];
                var lenged=[];
+               var injiao = [];
+                var datalengend = [];
                 for(var i=0;i<data.length;i++){
                   var dataer = data[i];
                   var dataArr=[];
                   var datavalue = [];
                   var dataid = [];
-                  var injiao = []
-                  // if(this.dataPush[i].kx!==''){
-                  //   name = this.dataPush[i].kx;
-                  // };
-                  // if(this.dataPush[i].kx!=='' &&this.dataPush[i].zy!==''){
-                  //   name =name+'-'
-                  // };
-                  // if(this.dataPush[i].zy!==''){
-                  //   name = name+this.dataPush[i].zy;
-                  // };
-                  // if(this.dataPush[i].zy!=='' &&this.dataPush[i].bj!==''){
-                  //   name =name+'-'+this.dataPush[i].bj
-                  // };
-                  // if(this.dataPush[i].bj!==''){
-                  //   name = name+this.dataPush[i].bj;
-                  // };
-                  // if(this.dataPush[i].bj!=='' &&this.dataPush[i].xs!==''){
-                  //   name =name+'-'
-                  // };
-                  // if(this.dataPush[i].xs!==''){
-                  //   name = name+this.dataPush[i].xs;
-                  // };
-                  // if(this.dataPush[i].xs!=='' &&this.dataPush[i].xq!==''){
-                  //   name =name+'-'
-                  // }
-                  // if(this.dataPush[i].xq!==''){
-                  //   name = name+this.dataPush[i].xq;
-                  // };
-                  lenged.push(name)
+                    injiao = []
+                  if(this.dataPush[i].kx!==''){
+                    name = this.dataPush[i].kx;
+                  };
+                  if(this.dataPush[i].kx!=='' &&this.dataPush[i].zy!==''){
+                    name =name+'-'
+                  };
+                  if(this.dataPush[i].zy!==''){
+                    name = name+this.dataPush[i].zy;
+                  };
+                  if(this.dataPush[i].zy!=='' &&this.dataPush[i].bj!==''){
+                    name =name+'-'+this.dataPush[i].bj
+                  };
+                  if(this.dataPush[i].bj!==''){
+                    name = name+this.dataPush[i].bj;
+                  };
+                  if(this.dataPush[i].bj!=='' &&this.dataPush[i].xs!==''){
+                    name =name+'-'
+                  };
+                  if(this.dataPush[i].xs!==''){
+                    name = name+this.dataPush[i].xs;
+                  };
+                  if(this.dataPush[i].xs!=='' &&this.dataPush[i].xq!==''){
+                    name =name+'-'
+                  }
+                  if(this.dataPush[i].xq!==''){
+                    name = name+this.dataPush[i].xq;
+                  };
+                  console.log(name)
+                  lenged.push(name);
+                  console.log(lenged)
                   dataoption.push({
                     name:name,
                     type: 'radar',
                     data:dataArr
-
                   });
-                    console.log(dataer)
                   for(var j = 0;j<dataer.length;j++){
-                      // injiao.push(dataer[j].name)
+                      injiao.push({name:dataer[j].name,max:100});
                       if(dataer[j].sum == undefined){
                         datavalue.push(0);
                       }else{
@@ -249,18 +258,20 @@ export default {
                   dataArr.push(
                     {
                       value:datavalue,
-                      name:'预警值',
+                      name:'平均值',
                       id:dataid
                     },
                   );
+                  datalengend = lenged;
+
                 };
-                // lenged.push('学院平均值');
-                // this.option.legend = lenged
+                this.option.radar.indicator = injiao;
+                lenged.push('平均值');
+                this.option.legend.data = datalengend;
                 this.option.series = dataoption;
-                  this.chart = this.$echarts.init(document.getElementById('leida'));
-                  this.chart.setOption(this.option);
+                this.chart = this.$echarts.init(document.getElementById('leida'));
+                this.chart.setOption(this.option);
                 console.log(this.option)
-              //  this.tableData.push(res.data)
 
             }else{
              this.$message(res.message);  
