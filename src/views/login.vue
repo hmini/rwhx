@@ -19,10 +19,7 @@
                                 <el-button type="button" @click="submitForm('form')"   @keyup.enter="submitForm('form')">登录</el-button>
                             </el-form-item>
                         </el-form>
-                        <p class="weibup">
-                            欢迎使用Kiosk应用平台<br/>
-
-                            <!-- 技术支持：天津市朗威科技发展有限公司 -->
+                        <p class="weibup">                            欢迎使用Kiosk应用平台<br/>
                         </p>
                     </div>
                 </div>
@@ -61,7 +58,7 @@ export default {
             if(res.code == 200){
                 var token = res.data;
                 localStorage.setItem('token',token);
-                this.$router.push({ path: '/index' });
+                this.$router.push({ path: '/pjgz' });
             }
          },
 
