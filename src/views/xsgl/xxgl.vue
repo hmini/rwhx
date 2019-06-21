@@ -57,66 +57,22 @@
             style="width: 100%"
             align="center"
              :row-class-name="tableRowClassName"
-             @selection-change="handleSelectionChange"
-             >
+             @selection-change="handleSelectionChange"  >
                 <!-- <el-table-column
                     type="selection"
                     width="" >
                 </el-table-column> -->
-                 <el-table-column
-                    label="学号"
-                    prop="identity"
-                   >
-                </el-table-column>
-                 <el-table-column
-                    label="姓名"
-                    prop="name"
-                    width="">
-                </el-table-column>
-                 <el-table-column
-                    label="班级"
-                    prop="team"
-                    width="">
-                </el-table-column>
-                 <el-table-column
-                    label="性别"
-                    prop="sex"
-                    width="">
-                </el-table-column>
-                 <!-- <el-table-column
-                   label="出生日期"
-                   prop="birthday"
-                    width="">
-                </el-table-column> -->
-                 <!-- <el-table-column
-                    label="身份证号"
-                    prop="xb"
-                    width="">
-                </el-table-column> -->
-                <!-- <el-table-column
-                    label="籍贯"
-                    prop="xb"
-                    width="">
-                </el-table-column> -->
-                <el-table-column
-                    label="联系电话"
-                    prop="mobile"
-                    width="">
-                </el-table-column>
-                <!-- <el-table-column
-                    label="分数"
-                    prop="xb"
-                    width="">
-                </el-table-column> -->
-                <el-table-column
-                    label="家长姓名"
-                    prop="parent"
-                    width="">
-                </el-table-column>
-                <el-table-column
-                    label="操作"
-                    prop="xb"
-                    width="">
+                 <el-table-column  label="学号" prop="identity"  > </el-table-column>
+                 <el-table-column label="姓名" prop="name"  width="">  </el-table-column>
+                 <el-table-column  label="班级" prop="team"  width=""> </el-table-column>
+                 <el-table-column  label="性别"  prop="sex" width=""> </el-table-column>
+                 <!-- <el-table-column label="出生日期" prop="birthday"  width="">  </el-table-column> -->
+                 <!-- <el-table-column label="身份证号"  prop="xb"  width="">  </el-table-column> -->
+                <!-- <el-table-column  label="籍贯" prop="xb" width="">   </el-table-column> -->
+                <el-table-column   label="联系电话"   prop="mobile" width="">  </el-table-column>
+                <!-- <el-table-column  label="分数"  prop="xb"  width="">  </el-table-column> -->
+                <el-table-column   label="家长姓名"  prop="parent"  width="">  </el-table-column>
+                <el-table-column  label="操作"    prop="xb" width="">
                       <template slot-scope="scope">
                         <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
                         <el-button @click="deleteClick(scope.row)" type="text" size="small">删除</el-button>
@@ -203,9 +159,16 @@ export default {
         },
         kxChange() {
             this.zyList();
+            this.form.zy = '';
+            this.searchList.zt=[];
+            this.form.bj = '';
+            this.searchList.bj=[];
+
         },
         zychange(){
             this.bjList();
+            this.form.bj = '';
+            this.searchList.bj=[];
         },
         tableRowClassName({row, rowIndex}) {
             if (rowIndex === 1) {

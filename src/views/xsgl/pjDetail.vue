@@ -250,6 +250,7 @@ export default {
        },
        loadingmain:false,
        dbData:[],
+       
       }  
     },
     methods:{

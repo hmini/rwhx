@@ -193,9 +193,15 @@ export default {
         },
         kxChange() {
             this.zyList();
+           this.form.zy = '';
+            this.searchList.zt=[];
+            this.form.bj = '';
+            this.searchList.bj=[];
         },
         zychange(){
             this.bjList();
+            this.form.bj = '';
+            this.searchList.bj=[];
         },
         tableRowClassName({row, rowIndex}) {
              return 'className';

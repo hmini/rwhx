@@ -18,7 +18,7 @@
                   </div>
                     <div>
                         <div class="over width100 zynr">
-                            <div class="xi-contain">
+                            <div class="xi-contain" v-loading="lodingAll">
                                 <div v-for="(item,index) in list" :key="index">
                                     <div class="main-title border-bottom">{{item.mainMenu.department}}</div>
                                     <div v-for="(son,index2) in item.sonMenu" :key="index2">
@@ -173,12 +173,14 @@
             },
             // 班级列表
             async deleteEvent(){
+                
                 var params = {
                     id:this.deleteId
                    
                 };
                 var res =  await delTeam(params);
                 if(res.code==200){
+                    
                     this.dialogVisible2 = false;
                     this.$message(res.message);  
                     this.bjList();
@@ -221,6 +223,7 @@
             },
             // 班级列表
             async bjList(){
+                this.lodingAll=true;
                 var params = {
                     specialty_parent_id:this.kxCode,
                     grade_id:this.njCode,
@@ -228,8 +231,8 @@
                     grade_name:this.njName       
                 };
                 var res =  await teamList(params);
-                console.log(res)
                 if(res.code==200){
+                    this.lodingAll=false;
                     this.list = res.data;
                     
                 }else{
