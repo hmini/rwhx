@@ -32,10 +32,13 @@
                             <p>角色</p>
                             <span class="fu-title">为当前管理员创建角色</span>
                             <el-radio-group v-model="form.role_id">
-                                <p v-for="item in jsList" :key="item.code">
-                                    <el-radio :label="item.name"  :value="item.code"></el-radio>
-                                </p>
                                 
+                                    <!-- <el-radio :label="3" :value="1">备选项</el-radio>
+                                    <el-radio :label="6" :value="2">备选项</el-radio>
+                                    <el-radio :label="9" :value="">备选项</el-radio> -->
+                                <p v-for="(item,index) in jsList" :key="index">
+                                    <el-radio :label="item.code">{{item.name}}</el-radio>
+                                </p>
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item style="width:100%">
@@ -106,8 +109,7 @@
                     password:'',
                     role_id:'',    
                     login:'',
-                    checkPass:'',
-
+                    checkPass:''
                 },
                 rules:{
                     login:[
@@ -160,7 +162,6 @@
                  this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.addyh();
-                    alert('submit!');
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -177,8 +178,7 @@
                 };
                 var res = await addUsers(params);
                 if(res.code == 200){
-                    console.log(res)
-                    this.jsList= res.data;
+                  
                 }else{
                     this.$message(res.message);
                 }
