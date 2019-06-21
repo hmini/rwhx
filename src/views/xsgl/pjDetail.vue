@@ -2,12 +2,11 @@
     <div class="page page-pjsz">
       <el-container>
         <el-header class="align-left">
-           <span>高职</span>
+           <span>{{this.$route.query.grade}}</span>
            <span>>></span>
-           <span>会计</span>
-           <span>高职</span>
+           <span>{{this.$route.query.specialty}}</span>
            <span>>></span>
-           <span>会计</span>
+           <span>{{this.$route.query.name}}</span>
        </el-header>
         <el-main style="padding-left:0px">
             <el-form :inline="true" class="align-left padding-left-20">
@@ -24,7 +23,7 @@
                     <el-button type="primary" @click="list()">查询</el-button>
                 </el-form-item>   
             </el-form>
-            <div class="pjsz">
+            <div class="pjsz" v-loading = "loadingmain">
                 <table class="backfff"   v-loading="fullscreenLoading">
                     <thead>
                         <tr class="pjsz-title">
@@ -50,7 +49,7 @@
                                                 <p>
                                                     <span>{{item.fjMenu.name}}</span><br/>
                                                     <span class="padding-5">参考值:{{item.fjMenu.standard}}</span>
-                                                     <span class="padding-5">当前值:{{Math.round(item.scrce)}}</span>
+                                                     <span class="padding-5">当前值:{{Math.round(item.fjMenu.score)}}</span>
                                                 </p> 
                                             </td>
                                         </tr>
@@ -70,7 +69,7 @@
                                             <p>
                                                 <span>{{item.fjMenu.name}}</span><br/>
                                                 <span class="padding-5">参考值:{{item.fjMenu.standard}}</span>
-                                                <span class="padding-5">当前值:{{Math.round(item.scrce)}}</span>
+                                                <span class="padding-5">当前值:{{Math.round(item.fjMenu.score)}}</span>
                                             </p> 
                                         </td>
                                        
@@ -91,7 +90,7 @@
                                             <p>
                                                 <span>{{item.fjMenu.name}}</span><br/>
                                                 <span class="padding-5">参考值:{{item.fjMenu.standard}}</span> 
-                                                <span class="padding-5">当前值:{{Math.round(item.scrce)}}</span>
+                                                <span class="padding-5">当前值:{{Math.round(item.fjMenu.score)}}</span>
                                             </p> 
                                         </td>
                                        
@@ -113,12 +112,15 @@
                                                 <span>{{item.name}}</span><br/>
                                             </p> 
                                             <p class="csfz">
-                                                <span>评分方式:加分</span>
+                                                <span v-show="item.type == 0">评分方式:加分</span>
+                                                <span v-show="item.type !== 0">评分方式:减分</span>
                                                 <span>初始分值:0.00</span><br/>
-                                                <span> <i>参考分值:0.00</i> <i>当前值:0.00</i> <i>已加分:0.00</i><i>加分次数:0.00</i></span>
+                                                <span> <i>参考分值:{{item.standard}}</i> <i>当前值:{{item.score}}</i>
+                                                 <!-- <i>已加分:00:00</i><i>加分次数:00:00</i> -->
+                                                 </span>
                                             </p>
                                             <p>
-                                                <el-button type="text" @click="addPf(item.id)">添加评分</el-button>
+                                                <el-button type="text" @click="addPf(item.id,item.type)">添加评分</el-button>
                                             </p>
                                         </td>
                                       
@@ -132,17 +134,16 @@
                             :visible.sync="dialogVisible"
                             width="30%" class="align-left">
                                 <el-form :label-position="labelPosition" :model="addForm" :rules="rules" ref="addForm">
-                                   
-                                   
+     
                                     <el-form-item label="分数"  prop="score">
                                         <el-input v-model="addForm.score"></el-input>
                                     </el-form-item>
-                                    <el-form-item label="评分方式"  prop="type">
+                                    <!-- <el-form-item label="评分方式"  prop="type">
                                          <el-select v-model="addForm.type" placeholder="请选择评分方式">
                                             <el-option label="加分" value="0" ></el-option>
                                             <el-option label="减分" value="1"></el-option>
                                         </el-select>
-                                    </el-form-item>
+                                    </el-form-item> -->
                                      <el-form-item label="备注" prop="bz">
                                         <el-input v-model="addForm.bz" type="textarea"></el-input>
                                     </el-form-item>
@@ -247,6 +248,7 @@ export default {
            threeId:'',
            fourId:'',
        },
+       loadingmain:false,
        dbData:[],
       }  
     },
@@ -303,16 +305,18 @@ export default {
        
       // 表格list
         async list(){
+            this.loadingmain = true;
              var params = {
                  student_id:this.$route.query.id,
                  term_id:this.form.xq,
              };
              var res = await scoreList(params);
             if(res.code == 200){
-                console.log(res)
+                this.loadingmain = false;
                 this.dataList = res.data;
                 this.xrsj()
             }else{
+                this.loadingmain = false;
                   this.$message(res.message);
             }
       },
@@ -351,8 +355,9 @@ export default {
              this.$message(res.message);  
             }
         },
-        addPf(id){
+        addPf(id,jf){
             this.dialogVisible = true;
+            this.addForm.type = jf;
             this.addForm.criterion_id = id;
         },
       submitForm(formName){
@@ -366,6 +371,7 @@ export default {
       } 
     },
     mounted(){
+        this.loadingmain = true;
         this.xqList();
         
     }

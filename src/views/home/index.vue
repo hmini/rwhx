@@ -73,7 +73,7 @@
                   </ul>
               </div>
               <div class="left clear-select">
-                <button >清空选择</button>
+                <button v-show="dataPush.length!==0" @click="clearALL()">清空选择</button>
               </div>
           </div>
           <div class="tuxing">
@@ -179,34 +179,21 @@ export default {
               }
           };
           this.dataidpush = deleteArr2;
-
-     
-        //  this.dataidpush =delete this.jsonarr(this.dataidpush)[index];
-        //   this.dataPush =delete this.jsonarr(this.dataPush)[index];
       },
       echartXr(){
         this.chart = this.$echarts.init(document.getElementById('leida'));
         this.chart.setOption(this.option);
-      },
-      // json转化成数组
-      jsonarr(jsonStr){
-        // var jsonObj =  JSON.parse(jsonStr);
-       console.log(typeof(jsonStr));
-       console.log(jsonStr);
-        var jsonStr1 = JSON.stringify(jsonStr);
-        console.log(typeof(jsonStr1))
-        //   var jsonArr = [];
-        //     for(var i =0 ;i < jsonObj.length;i++){
-        //             jsonArr[i] = jsonObj[i];
-        //     }
-        //     return jsonArr
       },
        zjdb(){
          this.dataidpush.push(JSON.parse(JSON.stringify(this.form)));
         // 修改formName格式；避免变化
          this.dataPush.push( JSON.parse(JSON.stringify(this.formName)));   
          console.log( this.dataPush)
-        },      
+        }, 
+         clearALL(){
+            this.dataidpush = [];
+            this.dataPush = [];
+         },   
         // 首页图标
         async tb(id){
             var params = {
@@ -285,7 +272,8 @@ export default {
                 this.option.series = dataoption;
                 this.chart = this.$echarts.init(document.getElementById('leida'));
                 this.chart.setOption(this.option);
-                console.log(this.option)
+                
+                
             }else{
              this.$message(res.message);  
            }
@@ -312,7 +300,6 @@ export default {
          },
           // 选择班级
          async bjList(){
-         
             var params = {
                 specialty_id:this.form.zy
 
@@ -399,6 +386,12 @@ export default {
       // this.echartXr();
       this.kxList();
       this.xqList();
+      this.chart = this.$echarts.init(document.getElementById('leida'));
+      this.chart.on('click',function(params){
+                  console.log(params);
+                  var id  = params.data;
+      })
+      
     
 
     }

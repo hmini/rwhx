@@ -201,7 +201,10 @@ export default {
              return 'className';
         },
         handleClick(row){
-             this.$router.push({path: '/PjDetail',query:{id:row.id}});
+            
+             this.$router.push({path: '/PjDetail',query:{id:row.id,specialty:row.specialty,
+                                        grade:row.grade,name:row.name,
+                                        department:row.department}});
 
         },
         // 学生信息list
