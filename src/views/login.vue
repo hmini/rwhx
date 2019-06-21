@@ -61,7 +61,7 @@ export default {
             if(res.code == 200){
                 var token = res.data;
                 localStorage.setItem('token',token);
-                this.$router.push({ path: '/index' });
+                this.$router.push({ path: '/pjgz' });
             }
          },
 
