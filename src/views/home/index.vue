@@ -78,19 +78,24 @@
           </div>
           <div class="tuxing">
               <div class="left leida" id="leida"></div>
-              <div class="table left">
-                  <table>
-                    <thead>
-                        <tr>
-                          <td>1</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                          <td>1</td>
-                        </tr>
-                    </tbody>
-                  </table>
+              <div class="table left"  v-for="(item,index) in option.series" :key="index" >
+                
+                  <div class="txh-flex backlan">
+                    <div class="onege"> </div>
+                    <div class="biaotinr" v-for="(tem,index2) in item.data" :key="index2">
+                        {{tem.name}}
+                    </div>
+                  </div>
+                  <div  class="txh-flex">
+                      <div>
+                        <div v-for="(em,index3) in option.radar.indicator" :key="index3" class="tybg">{{em.name}}</div> 
+                      </div>
+                      <div v-for="(tem,inde2) in item.data" :key="inde2">
+                          <div v-for="(vl,index4) in tem.value" :key="index4" class="tybg">
+                              {{vl}}
+                          </div>
+                      </div>
+                  </div>
               </div>
           </div>
         </el-main>
@@ -149,21 +154,7 @@ export default {
                 },
                 indicator: []
             },
-            series: [{
-                name: '',
-                type: 'radar',
-                // areaStyle: {normal: {}},
-                data : [
-                    {
-                        value : [4300, 10000, 28000, 35000],
-                        name : '预警值'
-                    },
-                    {
-                        value : [5000, 14000, 28000, 31000],
-                        name : '学院平均值'
-                    }
-                ]
-            }]
+            series: []
        },
        tableData:[] 
       }
@@ -182,9 +173,11 @@ export default {
         this.chart.setOption(this.option);
       },
        zjdb(){
-         this.dataidpush.push(this.form);
-         var data = this.formName;
-         this.dataPush.push(data);   
+         
+         
+         this.dataidpush.push(JSON.parse(JSON.stringify(this.form)));
+        // 修改formName格式；避免变化
+         this.dataPush.push( JSON.parse(JSON.stringify(this.formName)));   
          console.log( this.dataPush)
         },      
         // 首页图标
@@ -201,9 +194,9 @@ export default {
                var lenged=[];
                var injiao = [];
                 var datalengend = [];
+                var dataArr=[];
                 for(var i=0;i<data.length;i++){
                   var dataer = data[i];
-                  var dataArr=[];
                   var datavalue = [];
                   var dataid = [];
                     injiao = []
@@ -217,7 +210,7 @@ export default {
                     name = name+this.dataPush[i].zy;
                   };
                   if(this.dataPush[i].zy!=='' &&this.dataPush[i].bj!==''){
-                    name =name+'-'+this.dataPush[i].bj
+                    name =name+'-'
                   };
                   if(this.dataPush[i].bj!==''){
                     name = name+this.dataPush[i].bj;
@@ -234,45 +227,38 @@ export default {
                   if(this.dataPush[i].xq!==''){
                     name = name+this.dataPush[i].xq;
                   };
-                  console.log(name)
                   lenged.push(name);
-                  console.log(lenged)
-                  dataoption.push({
-                    name:name,
-                    type: 'radar',
-                    data:dataArr
-                  });
+                 
                   for(var j = 0;j<dataer.length;j++){
                       injiao.push({name:dataer[j].name,max:100});
+                      dataid.push(dataer[j].id);
                       if(dataer[j].sum == undefined){
                         datavalue.push(0);
                       }else{
                         datavalue.push(dataer[j].sum);
+                       
                       };
-                      if(dataer[j].id == undefined){
-                        dataid.push(0);
-                      }else{
-                        dataid.push(dataer[j].id);
-                      } 
                   };
-                  dataArr.push(
-                    {
-                      value:datavalue,
-                      name:'平均值',
-                      id:dataid
-                    },
-                  );
+                   dataArr.push(
+                          {
+                            value:datavalue,
+                            name:name,
+                            id:dataid
+                          },
+                    );
                   datalengend = lenged;
-
                 };
+                 dataoption.push({
+                    name:'平均值',
+                    type: 'radar',
+                    data:dataArr
+                  });
                 this.option.radar.indicator = injiao;
-                lenged.push('平均值');
                 this.option.legend.data = datalengend;
                 this.option.series = dataoption;
                 this.chart = this.$echarts.init(document.getElementById('leida'));
                 this.chart.setOption(this.option);
                 console.log(this.option)
-
             }else{
              this.$message(res.message);  
            }
@@ -339,21 +325,31 @@ export default {
         }, 
          kxchange(){
             this.formName.kx = this.aquireLabel(this.search.kx,this.form.kx,'code','name');
+            this.form.zy = '';
+            this.form.bj = '';
+            this.form.xs = '';
+            this.search.zy =[];
+            this.search.bj = [];
+            this.search.xs = [];
             this.zyList();
          },
          zychange(){
-              this.formName.zy = this.aquireLabel(this.search.zy,this.form.zy,'code','name');
-               console.log( this.formName.zy);
+            this.formName.zy = this.aquireLabel(this.search.zy,this.form.zy,'code','name');
+            this.form.bj = '';
+            this.form.xs = '';
+            this.search.bj = [];
+            this.search.xs = [];
              this.bjList()
          },
          bjchange(){
+            this.form.xs = '';
+            this.search.xs = [];
             this.formName.bj = this.aquireLabel(this.search.bj,this.form.bj,'code','name');
-            console.log( this.formName.bj);
              this.xsList()
          },
          xsChange(){
             this.formName.xs = this.aquireLabel(this.search.xs,this.form.xs,'code','name');
-             console.log( this.formName.xs);
+           
          },
          xname(){
             this.formName.xq = this.aquireLabel2(this.search.xq,this.form.xq,'id','term');
@@ -441,6 +437,46 @@ export default {
           width:60%;
           height:100%;
         }
+      .table{
+         width:40%;
+         .backlan{
+           background-color:#77ABCE;
+           color:#fff;
+         }
+         .txh-flex{
+           width:100%;
+           display: -webkit-flex; /* Safari */
+            display: flex;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+        
+            >div{
+              flex-grow:1;
+              -webkit-flex-grow:1;
+              width: 0%;
+            }
+         }
+         .biaotinr{
+           padding:10px;
+         }
+         .onege{
+            padding:10px;
+            height
+           border:1px solid #ededed;
+         }
+         .tybg{
+           line-height:30px;
+           padding:10px;
+           border:1px solid #ededed;
+         }
+         .biaotinr{
+           width:300px;
+           height:60px;
+            border:1px solid #ededed;
+         }
+      }
+       
       }
       ::-webkit-input-placeholder { /* WebKit browsers */
             color:    #385487;
