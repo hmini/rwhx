@@ -165,16 +165,43 @@ export default {
         this.tb(0)
       },
       deleteDb(index){
-         this.dataidpush =delete this.dataidpush[index];
-         this.dataPush =delete this.dataPush[index];
+          var deleteArr = [];
+          var deleteArr2 = [];
+        for(var i =0;i<this.dataPush.length;i++){
+              if(i != index){
+                  deleteArr.push(this.dataPush[i])
+                }
+          };
+          this.dataPush = deleteArr;
+          for(var i =0;i<this.dataidpush.length;i++){
+              if(i != index){
+                  deleteArr2.push(this.dataidpush[i])
+              }
+          };
+          this.dataidpush = deleteArr2;
+
+     
+        //  this.dataidpush =delete this.jsonarr(this.dataidpush)[index];
+        //   this.dataPush =delete this.jsonarr(this.dataPush)[index];
       },
       echartXr(){
         this.chart = this.$echarts.init(document.getElementById('leida'));
         this.chart.setOption(this.option);
       },
+      // json转化成数组
+      jsonarr(jsonStr){
+        // var jsonObj =  JSON.parse(jsonStr);
+       console.log(typeof(jsonStr));
+       console.log(jsonStr);
+        var jsonStr1 = JSON.stringify(jsonStr);
+        console.log(typeof(jsonStr1))
+        //   var jsonArr = [];
+        //     for(var i =0 ;i < jsonObj.length;i++){
+        //             jsonArr[i] = jsonObj[i];
+        //     }
+        //     return jsonArr
+      },
        zjdb(){
-         
-         
          this.dataidpush.push(JSON.parse(JSON.stringify(this.form)));
         // 修改formName格式；避免变化
          this.dataPush.push( JSON.parse(JSON.stringify(this.formName)));   
