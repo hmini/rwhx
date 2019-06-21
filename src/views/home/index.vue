@@ -77,9 +77,8 @@
               </div>
           </div>
           <div class="tuxing">
-              <div class="left leida" id="leida">111</div>
+              <div class="left leida" id="leida"></div>
               <div class="table left">
-               
               </div>
           </div>
         </el-main>
@@ -120,11 +119,11 @@ export default {
        dbData:[],
        option: {
             title: {
-                text: '基础雷达图'
+                text: '综合成绩'
             },
             tooltip: {},
             legend: {
-                data: ['预算分配（Allocated Budget）', '实际开销（Actual Spending）']
+                data: ['预警值', '学院平均值']
             },
             radar: {
                 // shape: 'circle',
@@ -137,33 +136,29 @@ export default {
                   }
                 },
                 indicator: [
-                  { name: '销售（sales）', max: 6500},
-                  { name: '管理（Administration）', max: 16000},
-                  { name: '信息技术（Information Techology）', max: 30000},
-                  { name: '客服（Customer Support）', max: 38000},
-                  { name: '研发（Development）', max: 52000},
-                  { name: '市场（Marketing）', max: 25000}
+                  { name: '发展潜力素质', max: 6500},
+                  { name: '思想道德素质', max: 16000},
+                  { name: '科学文化与职业技能素质', max: 30000},
+                  { name: '身体心理素质', max: 38000},
                 ]
             },
             series: [{
-                name: '预算 vs 开销（Budget vs spending）',
+                name: '',
                 type: 'radar',
                 // areaStyle: {normal: {}},
                 data : [
                     {
-                        value : [4300, 10000, 28000, 35000, 50000, 19000],
-                        name : '预算分配（Allocated Budget）'
+                        value : [4300, 10000, 28000, 35000],
+                        name : '预警值'
                     },
                     {
-                        value : [5000, 14000, 28000, 31000, 42000, 21000],
-                        name : '实际开销（Actual Spending）'
+                        value : [5000, 14000, 28000, 31000],
+                        name : '学院平均值'
                     }
                 ]
             }]
        },
-       tableData:[
-         
-       ] 
+       tableData:[] 
       }
        
     },
@@ -183,9 +178,8 @@ export default {
          this.dataidpush.push(this.form);
          this.dataPush.push(this.formName);   
          console.log( this.dataPush)
-        },  
-        
-             // 首页图标
+        },      
+        // 首页图标
         async tb(id){
             var params = {
               data:JSON.stringify(this.dataidpush),
@@ -194,7 +188,81 @@ export default {
             var res =  await makeTb(params);
             // console.log(res)
             if(res.code==200){
-               console.log(res)
+               var data = res.data;
+               var name="";
+               var dataoption = [];
+               var lenged=[];
+                for(var i=0;i<data.length;i++){
+                  var dataer = data[i];
+                  var dataArr=[];
+                  var datavalue = [];
+                  var dataid = [];
+                  if(this.dataPush[i].kx!==''){
+                    name = this.dataPush[i].kx;
+                  };
+                  if(this.dataPush[i].kx!=='' &&this.dataPush[i].zy!==''){
+                    name =name+'-'
+                  };
+                  if(this.dataPush[i].zy!==''){
+                    name = name+this.dataPush[i].zy;
+                  };
+                  if(this.dataPush[i].zy!=='' &&this.dataPush[i].bj!==''){
+                    name =name+'-'+this.dataPush[i].bj
+                  };
+                  if(this.dataPush[i].bj!==''){
+                    name = name+this.dataPush[i].bj;
+                  };
+                  if(this.dataPush[i].bj!=='' &&this.dataPush[i].xs!==''){
+                    name =name+'-'
+                  };
+                  if(this.dataPush[i].xs!==''){
+                    name = name+this.dataPush[i].xs;
+                  };
+                  if(this.dataPush[i].xs!=='' &&this.dataPush[i].xq!==''){
+                    name =name+'-'
+                  }
+                  if(this.dataPush[i].xq!==''){
+                    name = name+this.dataPush[i].xq;
+                  };
+                  lenged.push(name)
+                  dataoption.push({
+                    name:name,
+                    type: 'radar',
+                    data:dataArr
+
+                  });
+                    console.log(dataer)
+                  for(var j = 0;j<dataer.length;j++){
+                      if(dataer[j].sum == undefined){
+                        datavalue.push(0);
+                      }else{
+                        datavalue.push(dataer[j].sum);
+                      };
+                      if(dataer[j].id == undefined){
+                        dataid.push(0);
+                      }else{
+                        dataid.push(dataer[j].id);
+                      } 
+                  };
+                  dataArr.push(
+                    {
+                      value:datavalue,
+                      name:'预警值'
+                    },
+                    {
+                      value:dataid,
+                      name:'学院平均值'
+                    },
+                  );
+                };
+                lenged.push('预警值', '学院平均值');
+                this.option.legend = lenged
+                this.option.series = dataoption;
+                  this.chart = this.$echarts.init(document.getElementById('leida'));
+                  this.chart.setOption(this.option);
+                console.log(this.option)
+              //  this.tableData.push(res.data)
+
             }else{
              this.$message(res.message);  
            }
@@ -216,6 +284,7 @@ export default {
             var res =  await dicSpecialty(params);
             if(res.code==200){
                 this.search.zy = res.data;
+                
             }
          },
           // 选择班级
@@ -294,7 +363,7 @@ export default {
         },
     },
     mounted(){
-      this.echartXr();
+      // this.echartXr();
       this.kxList();
       this.xqList();
     
